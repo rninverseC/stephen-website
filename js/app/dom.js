@@ -1,0 +1,30 @@
+export const dom = {
+  starfieldCanvas: document.getElementById("starfield-layer"),
+  pagesLinks: document.getElementById("pages-links"),
+  projectsGrid: document.getElementById("projects-grid"),
+  connectLinks: document.getElementById("connect-links"),
+  localClock: document.getElementById("local-clock"),
+  statusLine: document.getElementById("status-line"),
+  trackTitle: document.getElementById("track-title"),
+  trackArtist: document.getElementById("track-artist"),
+  trackTimeCurrent: document.getElementById("track-time-current"),
+  trackTimeTotal: document.getElementById("track-time-total"),
+  trackProgress: document.getElementById("track-progress"),
+  trackProgressShell: document.querySelector(".track-progress-shell"),
+  guestbookForm: document.getElementById("guestbook-form"),
+  guestbookList: document.getElementById("guestbook-list"),
+  guestbookName: document.getElementById("guestbook-name"),
+  guestbookMessage: document.getElementById("guestbook-message"),
+  guestbookSubmit: document.querySelector("#guestbook-form button[type='submit']"),
+  guestbookMode: document.getElementById("guestbook-mode"),
+  guestbookAdminState: document.getElementById("guestbook-admin-state"),
+  guestbookAdminNote: document.getElementById("guestbook-admin-note"),
+  guestbookAdminRow: document.getElementById("guestbook-admin-row"),
+  adminEmail: document.getElementById("admin-email"),
+  adminPassword: document.getElementById("admin-password"),
+  adminLogin: document.getElementById("admin-login"),
+  adminLogout: document.getElementById("admin-logout"),
+  toggleStars: document.getElementById("toggle-stars")
+};
+
+export const reduceMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
