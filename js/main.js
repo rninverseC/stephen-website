@@ -123,7 +123,7 @@ function writeStorage(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    // Ignore storage write failures in constrained environments.
+    // ignore storage write failures in constrained environmnets
   }
 }
 
