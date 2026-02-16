@@ -1,0 +1,244 @@
+:root {
+  --bg-deep: #02040b;
+  --bg-mid: #0a1122;
+  --panel-bg: rgba(8, 16, 34, 0.72);
+  --panel-border: rgba(147, 197, 253, 0.28);
+  --text-main: #e8f2ff;
+  --text-muted: #a7b8d6;
+  --accent: #8ad7ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  color: var(--text-main);
+  font-family: "Space Grotesk", sans-serif;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(44, 80, 142, 0.35), transparent 34%),
+    radial-gradient(circle at 84% 0%, rgba(43, 86, 143, 0.2), transparent 28%),
+    linear-gradient(160deg, var(--bg-mid) 0%, var(--bg-deep) 62%);
+}
+
+.space-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star-layer,
+.trail-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.star {
+  position: absolute;
+  top: calc(var(--y) * 1%);
+  left: calc(var(--x) * 1%);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  opacity: 0.6;
+  background: #e6f4ff;
+  box-shadow:
+    0 0 5px rgba(167, 216, 255, 0.8),
+    0 0 13px rgba(96, 168, 255, 0.35);
+  animation: twinkle var(--twinkle) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.trail {
+  position: absolute;
+  top: calc(var(--y) * 1%);
+  left: calc(var(--x) * 1%);
+  width: var(--length);
+  height: 2px;
+  border-radius: 999px;
+  opacity: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(160, 220, 255, 0.92), rgba(255, 255, 255, 0));
+  filter: drop-shadow(0 0 7px rgba(109, 183, 255, 0.5));
+  transform: translate3d(0, 0, 0) rotate(var(--angle));
+  animation: fly var(--duration) linear infinite;
+  animation-delay: var(--delay);
+}
+
+.page-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(1.2rem, 3vw, 2.4rem);
+}
+
+.site-header h1 {
+  margin: 0;
+  font-family: "Caveat", cursive;
+  font-size: clamp(3rem, 10vw, 6.2rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 0 18px rgba(115, 183, 255, 0.35),
+    0 0 34px rgba(75, 136, 255, 0.24);
+}
+
+.site-header p {
+  margin: 0.45rem 0 1.4rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  align-items: start;
+  gap: clamp(1rem, 2.4vw, 1.7rem);
+}
+
+.main-content {
+  display: grid;
+  gap: clamp(1rem, 2.6vw, 1.4rem);
+}
+
+.panel,
+.side-panel {
+  border-radius: 22px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  box-shadow:
+    inset 0 0 0 1px rgba(241, 247, 255, 0.03),
+    0 14px 28px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(5px);
+}
+
+.panel {
+  padding: clamp(1rem, 3.2vw, 1.6rem);
+}
+
+.panel h2,
+.side-panel h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.45rem;
+}
+
+.panel p {
+  margin: 0 0 0.8rem;
+  color: #d3def0;
+  max-width: 70ch;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.project-card {
+  border: 1px solid rgba(138, 215, 255, 0.22);
+  border-radius: 16px;
+  background: rgba(8, 20, 44, 0.6);
+  padding: 0.9rem;
+}
+
+.project-card h3 {
+  margin: 0 0 0.45rem;
+  color: #d8f1ff;
+  font-size: 1rem;
+}
+
+.project-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.93rem;
+}
+
+.side-panel {
+  padding: 1rem;
+}
+
+.side-block + .side-block {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(138, 215, 255, 0.22);
+}
+
+.link-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.link-list a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.link-list a:hover,
+.link-list a:focus-visible {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.95;
+  }
+}
+
+@keyframes fly {
+  0% {
+    opacity: 0;
+    transform: translate3d(-38vw, -38vh, 0) rotate(var(--angle));
+  }
+  15% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(120vw, 120vh, 0) rotate(var(--angle));
+  }
+}
+
+@media (max-width: 900px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .side-panel {
+    order: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star,
+  .trail {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .link-list a {
+    transition: none;
+  }
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stephen Ye | Space Retro Home</title>
+  <meta name="description" content="Stephen Ye personal website in a space-retro style.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body id="top" data-motion="medium" data-stars="on" data-rain="on">
+  <div class="fx-root" aria-hidden="true">
+    <div id="star-layer" class="fx-layer fx-stars"></div>
+    <div id="rain-layer" class="fx-layer fx-rain"></div>
+    <div class="fx-vignette"></div>
+    <div class="scanline"></div>
+  </div>
+
+  <div class="site-wrap">
+    <header class="site-header">
+      <p class="eyebrow">signal: active</p>
+      <h1 class="site-title">Stephen Ye</h1>
+      <p class="site-tagline">hi</p>
+    </header>
+
+    <div class="layout-grid">
+      <main class="main-column">
+        <section class="panel" id="about">
+          <h2>About Me</h2>
+          <p>
+            wellsee
+          </p>
+          <p>
+            stuff
+          </p>
+        </section>
+
+        <section class="panel" id="projects">
+          <h2>Projects</h2>
+          <div id="projects-grid" class="projects-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="panel" id="guestbook" data-widget="guestbook">
+          <h2>Guestbook</h2>
+          <div class="guestbook-admin">
+            <p id="guestbook-mode" class="guestbook-mode">Guestbook mode: local</p>
+            <p id="guestbook-admin-state" class="guestbook-admin-state">Admin: signed out</p>
+            <div id="guestbook-admin-row" class="guestbook-admin-row">
+              <input id="admin-email" type="email" placeholder="Admin email">
+              <input id="admin-password" type="password" placeholder="Admin password">
+              <button id="admin-login" type="button">Admin Login</button>
+              <button id="admin-logout" type="button" hidden>Admin Logout</button>
+            </div>
+            <p id="guestbook-admin-note" class="guestbook-admin-note"></p>
+          </div>
+          <form id="guestbook-form" class="guestbook-form" autocomplete="off">
+            <label for="guestbook-name">Name</label>
+            <input id="guestbook-name" name="name" type="text" maxlength="30" placeholder="Visitor name">
+
+            <label for="guestbook-message">Message</label>
+            <textarea id="guestbook-message" name="message" rows="3" maxlength="180" required placeholder="Say hello to mission control..."></textarea>
+
+            <button type="submit">Send Signal</button>
+          </form>
+          <ol id="guestbook-list" class="guestbook-list" aria-live="polite"></ol>
+        </section>
+      </main>
+
+      <aside class="side-column" aria-label="Sidebar widgets">
+        <section class="panel side-panel" data-widget="pages">
+          <h2>Pages</h2>
+          <nav aria-label="Site pages">
+            <ul id="pages-links" class="link-list"></ul>
+          </nav>
+        </section>
+
+        <section class="panel side-panel" data-widget="status">
+          <h2>Status</h2>
+          <p class="status-row">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Online</span>
+          </p>
+          <p class="status-row">Local time: <time id="local-clock" datetime=""></time></p>
+          <p id="status-line" class="status-line"></p>
+        </section>
+
+        <section class="panel side-panel" data-widget="now-playing">
+          <h2>Now Playing</h2>
+          <article class="track-card" aria-label="Current track">
+            <div class="album-art" aria-hidden="true"></div>
+            <div>
+              <p id="track-title" class="track-title"></p>
+              <p id="track-artist" class="track-artist"></p>
+            </div>
+          </article>
+          <div class="track-time-row">
+            <span id="track-time-current">0:00</span>
+            <span id="track-time-total">0:00</span>
+          </div>
+          <div class="track-progress-shell" role="progressbar" aria-label="Track progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="track-progress" class="track-progress"></div>
+          </div>
+        </section>
+
+        <section class="panel side-panel" data-widget="connect">
+          <h2>Connect</h2>
+          <ul id="connect-links" class="link-list"></ul>
+        </section>
+
+        <section class="panel side-panel" data-widget="effects">
+          <h2>Effects</h2>
+          <div class="effect-row">
+            <label for="toggle-stars">
+              <input id="toggle-stars" type="checkbox" data-toggle="stars">
+              Stars
+            </label>
+          </div>
+          <div class="effect-row">
+            <label for="toggle-rain">
+              <input id="toggle-rain" type="checkbox" data-toggle="rain">
+              Rain
+            </label>
+          </div>
+
+          <fieldset class="motion-fieldset">
+            <legend>Motion</legend>
+            <label for="motion-low">
+              <input id="motion-low" type="radio" name="motion" value="low" data-motion="low">
+              Low
+            </label>
+            <label for="motion-medium">
+              <input id="motion-medium" type="radio" name="motion" value="medium" data-motion="medium">
+              Medium
+            </label>
+            <label for="motion-high">
+              <input id="motion-high" type="radio" name="motion" value="high" data-motion="high">
+              High
+            </label>
+          </fieldset>
+          <p id="effects-note" class="effects-note" hidden>Reduced-motion system setting detected. Heavy effects are minimized.</p>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="site-footer">
+      <p>Home base v1 // content placeholders are ready to replace</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
