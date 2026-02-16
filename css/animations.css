@@ -1,71 +1,9 @@
-.star {
-  position: absolute;
-  left: calc(var(--x) * 1%);
-  top: calc(var(--y) * 1%);
-  width: var(--size);
-  height: var(--size);
-  border-radius: 999px;
-  opacity: 0.7;
-  background: #ebf8ff;
-  box-shadow:
-    0 0 6px rgba(188, 230, 255, 0.75),
-    0 0 14px rgba(106, 178, 255, 0.4);
-  animation: starTwinkle calc(var(--duration) / var(--motion-multiplier)) ease-in-out infinite;
-  animation-delay: var(--delay);
-}
-
-.rain-drop {
-  position: absolute;
-  left: calc(var(--x) * 1%);
-  top: calc(var(--y) * 1%);
-  width: 2px;
-  height: var(--length);
-  border-radius: 999px;
-  opacity: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(199, 235, 255, 0),
-    rgba(160, 212, 255, 0.95) 70%,
-    rgba(199, 235, 255, 0)
-  );
-  transform: rotate(16deg);
-  filter: drop-shadow(0 0 5px rgba(114, 183, 255, 0.45));
-  animation: rainSlide calc(var(--duration) / var(--motion-multiplier)) linear infinite;
-  animation-delay: var(--delay);
-}
-
 .status-dot {
-  animation: statusPulse calc(2.5s / var(--motion-multiplier)) ease-out infinite;
+  animation: statusPulse 2.5s ease-out infinite;
 }
 
 .track-progress {
-  animation: progressGlow calc(3s / var(--motion-multiplier)) linear infinite;
-}
-
-@keyframes starTwinkle {
-  0%,
-  100% {
-    transform: scale(0.75);
-    opacity: 0.35;
-  }
-  50% {
-    transform: scale(1.18);
-    opacity: 1;
-  }
-}
-
-@keyframes rainSlide {
-  0% {
-    opacity: 0;
-    transform: translate3d(-25vw, -35vh, 0) rotate(16deg);
-  }
-  12% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(115vw, 130vh, 0) rotate(16deg);
-  }
+  animation: progressGlow 3s linear infinite;
 }
 
 @keyframes statusPulse {
@@ -89,8 +27,6 @@
   }
 }
 
-body.reduced-motion .star,
-body.reduced-motion .rain-drop,
 body.reduced-motion .status-dot,
 body.reduced-motion .track-progress {
   animation: none;

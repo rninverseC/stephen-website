@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stephen Ye | Space Retro Home</title>
+  <title>Stephen Ye</title>
   <meta name="description" content="Stephen Ye personal website in a space-retro style.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/animations.css">
 </head>
-<body id="top" data-motion="medium" data-stars="on" data-rain="on">
+<body id="top" data-stars="on">
+  <canvas id="starfield-layer" class="starfield-overlay fx-stars" aria-hidden="true"></canvas>
   <div class="fx-root" aria-hidden="true">
-    <div id="star-layer" class="fx-layer fx-stars"></div>
-    <div id="rain-layer" class="fx-layer fx-rain"></div>
     <div class="fx-vignette"></div>
     <div class="scanline"></div>
   </div>
@@ -118,40 +117,17 @@
               Stars
             </label>
           </div>
-          <div class="effect-row">
-            <label for="toggle-rain">
-              <input id="toggle-rain" type="checkbox" data-toggle="rain">
-              Rain
-            </label>
-          </div>
-
-          <fieldset class="motion-fieldset">
-            <legend>Motion</legend>
-            <label for="motion-low">
-              <input id="motion-low" type="radio" name="motion" value="low" data-motion="low">
-              Low
-            </label>
-            <label for="motion-medium">
-              <input id="motion-medium" type="radio" name="motion" value="medium" data-motion="medium">
-              Medium
-            </label>
-            <label for="motion-high">
-              <input id="motion-high" type="radio" name="motion" value="high" data-motion="high">
-              High
-            </label>
-          </fieldset>
-          <p id="effects-note" class="effects-note" hidden>Reduced-motion system setting detected. Heavy effects are minimized.</p>
         </section>
       </aside>
     </div>
 
     <footer class="site-footer">
-      <p>Home base v1 // content placeholders are ready to replace</p>
+      <p>Home base v1</p>
     </footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js"></script>
-  <script src="js/main.js" defer></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/main.js" defer></script>
 </body>
 </html>
