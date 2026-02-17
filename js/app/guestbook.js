@@ -47,10 +47,6 @@ function canDeleteGuestbookEntries() {
   return appState.guestbookMode === "supabase" && isAdminUser(appState.adminUser);
 }
 
-function renderGuestbookAdminState() {
-  if (dom.guestbookMode) {
-    dom.guestbookMode.textContent = `Guestbook mode: ${appState.guestbookMode}`;
-  }
 
   if (dom.guestbookAdminState) {
     if (appState.guestbookMode !== "supabase") {
