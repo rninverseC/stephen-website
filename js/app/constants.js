@@ -52,86 +52,107 @@ export const DEFAULT_GUESTBOOK_ENTRIES = [
   }
 ];
 
-export const STARFIELD_DENSITY = {
-  normal: 680,
-  reduced: 240
+export const SNOW_DENSITY = {
+  normal: 1500,
+  reduced: 1300
 };
 
-export const STARFIELD_PROFILE = {
+export const SNOW_PROFILE = {
   normal: {
-    speedMin: 1.3,
-    speedMax: 8.6,
-    driftAmplitude: 6.6,
-    driftFrequency: 0.52,
-    twinkleFactor: 0.9
+    sizeMinPx: 2.4,
+    sizeMaxPx: 5.8,
+    durationMinSec: 7,
+    durationMaxSec: 21,
+    straightRatio: 0.45,
+    straightMidDriftVw: 1.2,
+    straightEndDriftVw: 2.4,
+    swayMidDriftVw: 8,
+    swayEndDriftVw: 16,
+    alphaMin: 0.35,
+    alphaMax: 0.95
   },
   reduced: {
-    speedMin: 0.35,
-    speedMax: 2.4,
-    driftAmplitude: 1.2,
-    driftFrequency: 0.18,
-    twinkleFactor: 0.5
+    sizeMinPx: 2,
+    sizeMaxPx: 4.4,
+    durationMinSec: 10,
+    durationMaxSec: 26,
+    straightRatio: 0.65,
+    straightMidDriftVw: 0.8,
+    straightEndDriftVw: 1.5,
+    swayMidDriftVw: 4,
+    swayEndDriftVw: 7,
+    alphaMin: 0.3,
+    alphaMax: 0.8
   }
 };
 
-export const STARFIELD_SWIRL_PROFILE = {
+export const SNOW_LAYER_PROFILE = {
   normal: {
-    swirlDirection: -1,
-    centerDriftXPct: 2.6,
-    centerDriftYPct: 2.1,
-    centerDriftFreqX: 0.045,
-    centerDriftFreqY: 0.037,
-    orbitTiltDeg: 29,
-    orbitAspect: 0.42,
-    orbitLaneMinPct: 18,
-    orbitLaneMaxPct: 112,
-    orbitAngularBaseRadPerSec: 0.05,
-    orbitAngularDepthBoostRadPerSec: 0.2,
-    orbitAngularVariance: 0.28,
-    orbitBreathPct: 0.028,
-    radialPulseFreq: 0.86,
-    microJitterPxPerSec: 0.9
+    front: {
+      sizeMul: 1.28,
+      durationMul: 1.4,
+      spawnX: [-20, 98],
+      spawnY: [-36, 102],
+      driftMidX: [10, 20],
+      driftEndX: [24, 42],
+      travelMidY: 56,
+      travelEndY: 118
+    },
+    mid: {
+      sizeMul: 0.98,
+      durationMul: 2.7,
+      spawnX: [-14, 104],
+      spawnY: [-22, 102],
+      driftMidX: [14, 30],
+      driftEndX: [34, 60],
+      travelMidY: 42,
+      travelEndY: 96
+    },
+    back: {
+      sizeMul: 0.84,
+      durationMul: 4.1,
+      spawnX: [34, 130],
+      spawnY: [-40, 28],
+      driftMidX: [-24, -12],
+      driftEndX: [-54, -28],
+      travelMidY: 34,
+      travelEndY: 102
+    }
   },
   reduced: {
-    swirlDirection: -1,
-    centerDriftXPct: 1,
-    centerDriftYPct: 0.8,
-    centerDriftFreqX: 0.03,
-    centerDriftFreqY: 0.026,
-    orbitTiltDeg: 29,
-    orbitAspect: 0.42,
-    orbitLaneMinPct: 20,
-    orbitLaneMaxPct: 104,
-    orbitAngularBaseRadPerSec: 0.02,
-    orbitAngularDepthBoostRadPerSec: 0.075,
-    orbitAngularVariance: 0.18,
-    orbitBreathPct: 0.012,
-    radialPulseFreq: 0.55,
-    microJitterPxPerSec: 0.3
+    front: {
+      sizeMul: 1.2,
+      durationMul: 1.3,
+      spawnX: [-18, 100],
+      spawnY: [-28, 100],
+      driftMidX: [7, 14],
+      driftEndX: [16, 30],
+      travelMidY: 48,
+      travelEndY: 108
+    },
+    mid: {
+      sizeMul: 0.95,
+      durationMul: 1.9,
+      spawnX: [-12, 104],
+      spawnY: [-18, 100],
+      driftMidX: [10, 20],
+      driftEndX: [22, 40],
+      travelMidY: 34,
+      travelEndY: 78
+    },
+    back: {
+      sizeMul: 0.82,
+      durationMul: 2.6,
+      spawnX: [34, 128],
+      spawnY: [-30, 24],
+      driftMidX: [-16, -8],
+      driftEndX: [-34, -18],
+      travelMidY: 26,
+      travelEndY: 74
+    }
   }
 };
-
-export const NEBULA_CLOUDS = [
-  {
-    xPct: 18,
-    yPct: 22,
-    radiusPct: 38,
-    color: { r: 78, g: 120, b: 188 },
-    alpha: 0.03,
-    driftX: 2.5,
-    driftY: 1.2
-  },
-  {
-    xPct: 78,
-    yPct: 72,
-    radiusPct: 44,
-    color: { r: 64, g: 101, b: 170 },
-    alpha: 0.022,
-    driftX: -1.8,
-    driftY: 0.9
-  }
-];
 
 export const DEFAULT_EFFECT_SETTINGS = {
-  stars: true
+  snow: true
 };

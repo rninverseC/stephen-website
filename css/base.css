@@ -1,20 +1,22 @@
 :root {
-  --bg-main: #05070f;
-  --bg-panel: rgba(6, 12, 24, 0.86);
-  --bg-card: rgba(7, 14, 28, 0.9);
-  --border-main: rgba(125, 161, 212, 0.26);
-  --border-soft: rgba(125, 161, 212, 0.16);
-  --text-main: #e8f3ff;
-  --text-soft: #a6bbd9;
-  --accent: #8ed6ff;
-  --accent-strong: #71bdff;
-  --ok: #8bffcf;
-  --shadow-deep: rgba(0, 0, 0, 0.6);
-  --focus-ring: 0 0 0 2px rgba(20, 39, 69, 0.95), 0 0 0 4px rgba(142, 214, 255, 0.7);
+  --font-body: "IBM Plex Mono", "VT323", monospace;
+  --font-display: "Jersey 10", "Silkscreen", monospace;
+  --bg-main: #010408;
+  --bg-panel: #000;
+  --bg-card: #000;
+  --border-main: rgba(255, 255, 255, 0.3);
+  --border-soft: rgba(255, 255, 255, 0.2);
+  --text-main: #fff;
+  --text-soft: #fff;
+  --accent: #fff;
+  --accent-strong: #fff;
+  --ok: #39ff4a;
+  --shadow-deep: rgba(0, 0, 0, 0.72);
+  --focus-ring: 0 0 0 2px rgba(0, 0, 0, 0.95), 0 0 0 4px rgba(255, 255, 255, 0.72);
   --radius-main: 6px;
   --radius-soft: 4px;
   --fx-opacity: 1;
-  --stars-opacity: 1;
+  --snow-opacity: 1;
   --scanline-opacity: 0.07;
 }
 
@@ -30,14 +32,18 @@ body {
 
 html {
   scroll-behavior: smooth;
+  font-size: 104%;
 }
 
 body {
   position: relative;
   color: var(--text-main);
-  font-family: "IBM Plex Mono", monospace;
-  line-height: 1.45;
-  background: #000;
+  font-family: var(--font-body);
+  line-height: 1.32;
+  letter-spacing: 0.02em;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(8, 30, 36, 0.35), transparent 54%),
+    #000;
 }
 
 a {
@@ -71,13 +77,13 @@ textarea:focus-visible {
   inset: 0;
 }
 
-.starfield-overlay {
+.snow-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
   z-index: 0;
-  opacity: var(--stars-opacity);
+  opacity: var(--snow-opacity);
 }
 
 .fx-vignette {
@@ -91,7 +97,7 @@ textarea:focus-visible {
 .site-wrap {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 920px;
   margin: 0 auto;
   padding: clamp(1rem, 2vw, 2rem);
 }
@@ -109,17 +115,20 @@ textarea:focus-visible {
 }
 
 .site-title {
-  margin: 0.24rem 0 0;
-  display: inline-block;
-  font-family: "Orbitron", "IBM Plex Mono", monospace;
-  font-weight: 700;
-  font-size: clamp(2.2rem, 6.7vw, 4.9rem);
-  line-height: 0.92;
-  letter-spacing: 0.02em;
-  color: #f2f8ff;
+  margin: 0.24rem auto 0;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.35rem, 6.8vw, 4.9rem);
+  line-height: 0.9;
+  letter-spacing: 0.08em;
+  color: #28929c;
   text-shadow:
-    0 0 10px rgba(129, 191, 255, 0.24),
-    0 0 26px rgba(63, 118, 191, 0.18);
+    0 0 5px rgba(43, 138, 124, 0.58),
+    0 0 16px rgba(43, 138, 124, 0.42),
+    0 0 24px rgba(43, 138, 124, 0.24);
 }
 
 .site-title::after {
@@ -128,9 +137,9 @@ textarea:focus-visible {
   width: min(62vw, 16.5rem);
   max-width: 100%;
   height: 2px;
-  margin-top: 0.42rem;
+  margin: 0.42rem auto 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(142, 214, 255, 0.72), rgba(142, 214, 255, 0.08));
+  background: linear-gradient(90deg, rgba(43, 138, 124, 0.84), rgba(43, 138, 124, 0.28), rgba(43, 138, 124, 0.06));
 }
 
 .site-tagline {
@@ -142,7 +151,7 @@ textarea:focus-visible {
 
 .layout-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) 240px;
   gap: 1rem;
   align-items: start;
 }
@@ -156,24 +165,27 @@ textarea:focus-visible {
 .panel {
   border: 1px solid var(--border-main);
   border-radius: var(--radius-main);
-  background: linear-gradient(180deg, rgba(6, 14, 28, 0.82), var(--bg-panel));
+  background: transparent;
   box-shadow:
-    inset 0 0 0 1px rgba(196, 225, 255, 0.035),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
     0 12px 22px var(--shadow-deep);
   padding: 1rem;
 }
 
 .panel h2 {
   margin: 0 0 0.8rem;
-  color: #d8ecff;
-  font-size: 1rem;
+  color: #28929c;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  line-height: 1.05;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  text-shadow: none;
 }
 
 .panel p {
   margin: 0 0 0.85rem;
-  color: #d4e3f7;
+  color: #fff;
   font-size: 0.93rem;
 }
 
@@ -211,7 +223,7 @@ textarea:focus-visible {
 
 .project-tags {
   margin-top: 0.5rem;
-  color: #90badf;
+  color: #fff;
   font-size: 0.74rem;
 }
 
@@ -232,7 +244,7 @@ textarea:focus-visible {
 
 .link-list a:hover,
 .link-list a:focus-visible {
-  border-color: rgba(142, 214, 255, 0.35);
+  border-color: rgba(41, 215, 234, 0.45);
   transform: translateX(3px);
 }
 
@@ -241,7 +253,20 @@ textarea:focus-visible {
   align-items: center;
   gap: 0.45rem;
   margin-bottom: 0.45rem;
-  color: #d7e6f9;
+  color: #fff;
+}
+
+.status-online-row {
+  margin-bottom: 0.6rem;
+  padding: 0.38rem 0.5rem;
+  border: 1px solid rgba(71, 255, 107, 0.4);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 40% 50%, rgba(53, 255, 100, 0.22), transparent 62%),
+    rgba(0, 0, 0, 0.9);
+  box-shadow:
+    inset 0 0 20px rgba(59, 255, 107, 0.2),
+    0 0 16px rgba(56, 255, 116, 0.2);
 }
 
 .status-dot {
@@ -249,7 +274,30 @@ textarea:focus-visible {
   height: 0.55rem;
   border-radius: 999px;
   background: var(--ok);
-  box-shadow: 0 0 0 2px rgba(139, 255, 207, 0.25);
+  box-shadow: 0 0 0 2px rgba(57, 255, 74, 0.26);
+}
+
+.status-online-row .status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.status-prefix {
+  font-family: var(--font-body);
+  color: #fff;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+}
+
+.status-online-text {
+  font-family: var(--font-display);
+  color: #39ff4a;
+  font-size: clamp(1.75rem, 4.2vw, 2.2rem);
+  line-height: 0.92;
+  letter-spacing: 0.06em;
+  text-shadow:
+    0 0 6px rgba(50, 255, 97, 0.62),
+    0 0 14px rgba(50, 255, 97, 0.46);
 }
 
 .status-line {
@@ -273,16 +321,16 @@ textarea:focus-visible {
   background-size: cover;
   background-position: center;
   background:
-    radial-gradient(circle at 30% 28%, rgba(175, 230, 255, 0.8), transparent 35%),
-    linear-gradient(145deg, #1a3360, #09152d);
+    radial-gradient(circle at 30% 28%, rgba(116, 237, 248, 0.62), transparent 35%),
+    linear-gradient(145deg, #102b30, #07161b);
 }
 
 .album-art.has-art {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: rgba(4, 10, 20, 0.92);
-  box-shadow: 0 0 20px rgba(95, 160, 255, 0.2);
+  background-color: rgba(3, 10, 14, 0.92);
+  box-shadow: 0 0 20px rgba(60, 224, 242, 0.22);
 }
 
 .track-title {
@@ -309,7 +357,7 @@ textarea:focus-visible {
   margin-top: 0.4rem;
   border: 1px solid var(--border-soft);
   border-radius: 999px;
-  background: rgba(32, 59, 95, 0.35);
+  background: rgba(0, 0, 0, 0.9);
   overflow: hidden;
   height: 9px;
 }
@@ -318,7 +366,7 @@ textarea:focus-visible {
   height: 100%;
   width: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(114, 189, 255, 0.85), rgba(166, 223, 255, 0.95));
+  background: linear-gradient(90deg, rgba(41, 215, 234, 0.84), rgba(123, 241, 255, 0.94));
 }
 
 .guestbook-form {
@@ -331,7 +379,7 @@ textarea:focus-visible {
   margin-bottom: 0.85rem;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-soft);
-  background: rgba(8, 19, 35, 0.68);
+  background: #000;
   padding: 0.6rem;
 }
 
@@ -367,7 +415,7 @@ textarea:focus-visible {
   width: 100%;
   border: 1px solid var(--border-soft);
   border-radius: 8px;
-  background: rgba(12, 24, 44, 0.86);
+  background: #000;
   color: var(--text-main);
   padding: 0.38rem 0.5rem;
   font: inherit;
@@ -376,7 +424,7 @@ textarea:focus-visible {
 
 .guestbook-admin-row button {
   cursor: pointer;
-  background: linear-gradient(180deg, rgba(53, 96, 156, 0.7), rgba(23, 51, 95, 0.7));
+  background: #000;
 }
 
 .guestbook-admin-row button[hidden] {
@@ -399,7 +447,7 @@ textarea:focus-visible {
   width: 100%;
   border: 1px solid var(--border-soft);
   border-radius: 9px;
-  background: rgba(9, 20, 36, 0.78);
+  background: #000;
   color: var(--text-main);
   padding: 0.5rem 0.58rem;
   font: inherit;
@@ -414,7 +462,7 @@ textarea:focus-visible {
   justify-self: start;
   border: 1px solid var(--border-main);
   border-radius: 9px;
-  background: linear-gradient(180deg, rgba(53, 96, 156, 0.7), rgba(23, 51, 95, 0.7));
+  background: #000;
   color: var(--text-main);
   padding: 0.45rem 0.75rem;
   font: inherit;
@@ -433,7 +481,7 @@ textarea:focus-visible {
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-soft);
   padding: 0.65rem;
-  background: rgba(6, 17, 33, 0.78);
+  background: #000;
 }
 
 .guestbook-entry header {
@@ -456,14 +504,14 @@ textarea:focus-visible {
 
 .guestbook-entry time {
   font-size: 0.74rem;
-  color: #86a5c7;
+  color: #fff;
 }
 
 .guestbook-delete {
   border: 1px solid var(--border-soft);
   border-radius: 8px;
-  background: rgba(24, 45, 76, 0.75);
-  color: #d7ebff;
+  background: #000;
+  color: #fff;
   padding: 0.12rem 0.38rem;
   font: inherit;
   font-size: 0.72rem;
@@ -477,7 +525,7 @@ textarea:focus-visible {
 
 .guestbook-entry p {
   margin: 0.35rem 0 0;
-  color: #d8e8ff;
+  color: #d3edf2;
   font-size: 0.86rem;
   overflow-wrap: anywhere;
 }
@@ -496,7 +544,7 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  color: #d8e8fb;
+  color: #fff;
   font-size: 0.86rem;
 }
 
@@ -507,19 +555,19 @@ textarea:focus-visible {
   text-align: right;
 }
 
-body[data-stars="off"] .fx-stars {
+body[data-snow="off"] .fx-snow {
   display: none;
 }
 
 body.reduced-motion {
   --fx-opacity: 0.72;
-  --stars-opacity: 0.72;
+  --snow-opacity: 0.72;
   --scanline-opacity: 0.02;
 }
 
 @media (max-width: 1040px) {
   .layout-grid {
-    grid-template-columns: minmax(0, 1fr) 292px;
+    grid-template-columns: minmax(0, 1fr) 220px;
   }
 }
 

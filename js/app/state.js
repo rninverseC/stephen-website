@@ -1,21 +1,14 @@
 export const appState = {
   guestbookEntries: [],
-  userEffectSettings: { stars: true },
+  userEffectSettings: { snow: true },
   guestbookMode: "local",
   supabaseClient: null,
   adminUser: null,
   guestbookBusy: false
 };
 
-export const starfieldState = {
-  ctx: null,
-  width: 0,
-  height: 0,
-  dpr: 1,
-  stars: [],
-  rafId: null,
-  lastTs: 0,
-  elapsedSec: 0,
+export const snowState = {
   isReady: false,
-  resizeBound: false
+  resizeBound: false,
+  flakeCount: 0
 };

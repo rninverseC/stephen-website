@@ -1,5 +1,5 @@
 export const dom = {
-  starfieldCanvas: document.getElementById("starfield-layer"),
+  snowLayer: document.getElementById("snow-layer"),
   pagesLinks: document.getElementById("pages-links"),
   projectsGrid: document.getElementById("projects-grid"),
   connectLinks: document.getElementById("connect-links"),
@@ -25,7 +25,7 @@ export const dom = {
   adminPassword: document.getElementById("admin-password"),
   adminLogin: document.getElementById("admin-login"),
   adminLogout: document.getElementById("admin-logout"),
-  toggleStars: document.getElementById("toggle-stars")
+  toggleSnow: document.getElementById("toggle-snow")
 };
 
 export const reduceMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");

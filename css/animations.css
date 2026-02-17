@@ -6,12 +6,44 @@
   animation: progressGlow 3s linear infinite;
 }
 
+.snowflake {
+  position: absolute;
+  left: var(--x, 50vw);
+  top: var(--y, -10vh);
+  width: var(--size, 2px);
+  height: var(--size, 2px);
+  animation: snowfall var(--duration, 14s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+.snowflake-back {
+  border-radius: 999px;
+  background: rgba(236, 246, 255, calc(var(--alpha, 0.78) * 1.02));
+  box-shadow: 0 0 calc(var(--size, 2px) * 1.18) rgba(204, 228, 255, 0.5);
+}
+
+.snowflake-mid {
+  border-radius: 999px;
+  background: rgba(236, 246, 255, calc(var(--alpha, 0.78) * 0.94));
+  box-shadow: 0 0 calc(var(--size, 2px) * 1.05) rgba(204, 228, 255, 0.42);
+}
+
+.snowflake-front {
+  border-radius: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dce7f7' stroke-width='2.1' stroke-linecap='round'%3E%3Cline x1='32' y1='6' x2='32' y2='58'/%3E%3Cline x1='10' y1='19' x2='54' y2='45'/%3E%3Cline x1='10' y1='45' x2='54' y2='19'/%3E%3C/g%3E%3Cg fill='none' stroke='%23b7c8de' stroke-width='1.3' stroke-linecap='round'%3E%3Cline x1='32' y1='13' x2='27' y2='18'/%3E%3Cline x1='32' y1='13' x2='37' y2='18'/%3E%3Cline x1='32' y1='51' x2='27' y2='46'/%3E%3Cline x1='32' y1='51' x2='37' y2='46'/%3E%3Cline x1='16' y1='22' x2='22' y2='22'/%3E%3Cline x1='48' y1='42' x2='42' y2='42'/%3E%3Cline x1='16' y1='42' x2='22' y2='42'/%3E%3Cline x1='48' y1='22' x2='42' y2='22'/%3E%3C/g%3E%3Ccircle cx='32' cy='32' r='2.1' fill='%23ecf3ff'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  box-shadow: 0 0 calc(var(--size, 2px) * 0.95) rgba(188, 213, 240, 0.42);
+}
+
 @keyframes statusPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(139, 255, 207, 0.45);
+    box-shadow: 0 0 0 0 rgba(57, 255, 74, 0.48);
   }
   100% {
-    box-shadow: 0 0 0 10px rgba(139, 255, 207, 0);
+    box-shadow: 0 0 0 10px rgba(57, 255, 74, 0);
   }
 }
 
@@ -27,7 +59,29 @@
   }
 }
 
+@keyframes snowfall {
+  0% {
+    transform: translate3d(0, -15vh, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--alpha, 0.78);
+  }
+  50% {
+    transform: translate3d(var(--drift-mid, 0vw), calc(var(--travel-mid-y, 52) * 1vh), 0);
+    opacity: calc(var(--alpha, 0.78) * 0.92);
+  }
+  100% {
+    transform: translate3d(var(--drift-end, 0vw), calc(var(--travel-end-y, 115) * 1vh), 0);
+    opacity: 0;
+  }
+}
+
 body.reduced-motion .status-dot,
 body.reduced-motion .track-progress {
   animation: none;
+}
+
+body.reduced-motion .snowflake {
+  animation-duration: calc(var(--duration, 14s) * 1.35);
 }
