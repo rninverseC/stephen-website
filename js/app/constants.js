@@ -13,12 +13,12 @@ export const GUESTBOOK_TABLE = typeof APP_CONFIG.guestbookTable === "string" && 
   : "guestbook_messages";
 
 export const NAV_ITEMS = [
-  { label: "Home", href: "#top" },
-  { label: "About Me", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Album", href: "#" },
-  { label: "Blog", href: "#" },
-  { label: "Life", href: "#" }
+  { label: "Home", href: "index.html" },
+  { label: "About Me", href: "about.html" },
+  { label: "Projects", href: "projects.html" },
+  { label: "Album", href: "album.html" },
+  { label: "Blog", href: "blog.html" },
+  { label: "Life", href: "life.html" }
 ];
 
 export const PROJECTS = [];

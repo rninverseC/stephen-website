@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stephen Ye - Projects</title>
+  <meta name="description" content="Projects by Stephen Ye.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jersey+10&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/animations.css">
+</head>
+<body id="top" data-snow="on">
+  <div id="snow-layer" class="snow-overlay fx-snow" aria-hidden="true"></div>
+  <div class="fx-root" aria-hidden="true">
+    <div class="fx-vignette"></div>
+    <div class="scanline"></div>
+  </div>
+
+  <div class="site-wrap">
+    <header class="site-header">
+      <p class="eyebrow">signal: active</p>
+      <h1 class="site-title">Stephen Ye</h1>
+    </header>
+
+    <div class="layout-grid">
+      <main class="main-column">
+        <section class="panel" id="projects">
+          <h2>Projects</h2>
+          <div id="projects-grid" class="projects-grid" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <aside class="side-column" aria-label="Sidebar widgets">
+        <section class="panel side-panel" data-widget="pages">
+          <h2>Pages</h2>
+          <nav aria-label="Site pages">
+            <ul id="pages-links" class="link-list"></ul>
+          </nav>
+        </section>
+
+        <section class="panel side-panel" data-widget="status">
+          <p class="status-row status-online-row">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-prefix">I'm</span>
+            <span class="status-online-text">ONLINE!</span>
+          </p>
+          <p class="status-row">Local time: <time id="local-clock" datetime=""></time></p>
+          <p id="status-line" class="status-line"></p>
+        </section>
+
+        <section class="panel side-panel" data-widget="now-playing">
+          <h2>IM LISTENING TO:</h2>
+          <article class="track-card" aria-label="Current track">
+            <div id="track-art" class="album-art" aria-hidden="true"></div>
+            <div>
+              <p id="track-title" class="track-title"></p>
+              <p id="track-artist" class="track-artist"></p>
+            </div>
+          </article>
+          <div class="track-time-row">
+            <span id="track-time-current">0:00</span>
+            <span id="track-time-total">0:00</span>
+          </div>
+          <div class="track-progress-shell" role="progressbar" aria-label="Track progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="track-progress" class="track-progress"></div>
+          </div>
+        </section>
+
+        <section class="panel side-panel" data-widget="connect">
+          <h2>Connect</h2>
+          <ul id="connect-links" class="link-list"></ul>
+        </section>
+
+        <section class="panel side-panel" data-widget="effects">
+          <h2>Effects</h2>
+          <div class="effect-row">
+            <label for="toggle-snow">
+              <input id="toggle-snow" type="checkbox" data-toggle="snow">
+              Snow
+            </label>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="site-footer">
+      <p>so what do you mean now mm</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script type="module" src="../js/main.js"></script>
+</body>
+</html>

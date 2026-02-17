@@ -97,7 +97,7 @@ function canDeleteGuestbookEntries() {
   } else {
     setGuestbookNote("Welcome");
   }
-}
+
 
 function loadLocalGuestbookEntries() {
   const stored = readStorage(STORAGE_KEYS.guestbook, DEFAULT_GUESTBOOK_ENTRIES);
