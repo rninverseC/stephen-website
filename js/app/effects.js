@@ -2,8 +2,8 @@ import {
   STORAGE_KEYS,
   STARFIELD_DENSITY,
   STARFIELD_PROFILE,
+  STARFIELD_SWIRL_PROFILE,
   NEBULA_CLOUDS,
-  RINGED_PLANET,
   DEFAULT_EFFECT_SETTINGS
 } from "./constants.js";
 import { dom, reduceMotionMedia } from "./dom.js";
@@ -34,20 +34,8 @@ function getStarfieldProfile() {
   return reduceMotionMedia.matches ? STARFIELD_PROFILE.reduced : STARFIELD_PROFILE.normal;
 }
 
-function setPointerTarget(clientX, clientY) {
-  if (window.innerWidth <= 0 || window.innerHeight <= 0) {
-    return;
-  }
-
-  starfieldState.targetPointerX = clamp((clientX / window.innerWidth) * 2 - 1, -1, 1);
-  starfieldState.targetPointerY = clamp((clientY / window.innerHeight) * 2 - 1, -1, 1);
-  starfieldState.pointerActive = true;
-}
-
-function resetPointerTarget() {
-  starfieldState.pointerActive = false;
-  starfieldState.targetPointerX = 0;
-  starfieldState.targetPointerY = 0;
+function getStarfieldSwirlProfile() {
+  return reduceMotionMedia.matches ? STARFIELD_SWIRL_PROFILE.reduced : STARFIELD_SWIRL_PROFILE.normal;
 }
 
 function initStarfieldCanvas() {
@@ -72,50 +60,46 @@ function initStarfieldCanvas() {
     starfieldState.resizeBound = true;
   }
 
-  if (!starfieldState.pointerBound) {
-    window.addEventListener("pointermove", (event) => {
-      setPointerTarget(event.clientX, event.clientY);
-    }, { passive: true });
-
-    window.addEventListener("pointerdown", (event) => {
-      setPointerTarget(event.clientX, event.clientY);
-    }, { passive: true });
-
-    window.addEventListener("pointerout", (event) => {
-      if (!event.relatedTarget) {
-        resetPointerTarget();
-      }
-    });
-
-    window.addEventListener("blur", () => {
-      resetPointerTarget();
-    });
-
-    starfieldState.pointerBound = true;
-  }
-
   resizeStarfield(false);
   return true;
 }
 
-function createStar(profile, width, height) {
+function createStar(width, height, swirlProfile) {
   const zLayer = random(0.3, 1);
   const radius = 0.35 + Math.pow(Math.random(), 2.4) * 1.5;
   const alpha = random(0.2, 0.95);
   const twinkleSpeed = random(0.9, 3.1);
-  const angle = random(0, Math.PI * 2);
-  const speed = random(profile.speedMin, profile.speedMax) * (0.35 + zLayer);
+  const laneBase = Math.min(width, height) * random(swirlProfile.orbitLaneMinPct, swirlProfile.orbitLaneMaxPct) / 100;
+  const orbitA = laneBase * (0.58 + zLayer * 0.7) * random(0.9, 1.12);
+  const orbitB = orbitA * swirlProfile.orbitAspect * random(0.9, 1.12);
+  const orbitPhase = random(0, Math.PI * 2);
+  const orbitSpeed = (swirlProfile.orbitAngularBaseRadPerSec + zLayer * swirlProfile.orbitAngularDepthBoostRadPerSec)
+    * random(1 - swirlProfile.orbitAngularVariance, 1 + swirlProfile.orbitAngularVariance);
+  const radialPhase = random(0, Math.PI * 2);
+  const centerX = width * 0.58;
+  const centerY = height * 0.56;
+  const tilt = (swirlProfile.orbitTiltDeg * Math.PI) / 180;
+  const cosTilt = Math.cos(tilt);
+  const sinTilt = Math.sin(tilt);
+  const localX = orbitA * Math.cos(orbitPhase);
+  const localY = orbitB * Math.sin(orbitPhase);
+  const x = centerX + localX * cosTilt - localY * sinTilt;
+  const y = centerY + localX * sinTilt + localY * cosTilt;
 
   return {
-    x: random(0, width),
-    y: random(0, height),
+    x,
+    y,
     zLayer,
     radius,
     alpha,
     twinkleSpeed,
-    vx: Math.cos(angle) * speed,
-    vy: Math.sin(angle) * speed,
-    driftPhase: random(0, Math.PI * 2)
+    driftPhase: random(0, Math.PI * 2),
+    orbitA,
+    orbitB,
+    orbitPhase,
+    orbitSpeed,
+    radialPhase,
+    jitterPhase: random(0, Math.PI * 2)
   };
 }
 
@@ -123,12 +107,11 @@ function buildStars(count) {
   if (!initStarfieldCanvas()) {
     return;
   }
-
-  const profile = getStarfieldProfile();
+  const swirlProfile = getStarfieldSwirlProfile();
   const stars = [];
 
   for (let i = 0; i < count; i += 1) {
-    stars.push(createStar(profile, starfieldState.width, starfieldState.height));
+    stars.push(createStar(starfieldState.width, starfieldState.height, swirlProfile));
   }
 
   starfieldState.stars = stars;
@@ -170,33 +153,29 @@ function resizeStarfield(rebuild = true) {
   }
 }
 
-function wrapStar(star, margin) {
-  if (star.x < -margin) {
-    star.x = starfieldState.width + margin;
-  } else if (star.x > starfieldState.width + margin) {
-    star.x = -margin;
-  }
-
-  if (star.y < -margin) {
-    star.y = starfieldState.height + margin;
-  } else if (star.y > starfieldState.height + margin) {
-    star.y = -margin;
-  }
-}
-
-function updateStars(deltaSec, profile) {
-  const margin = 24;
+function updateStars(deltaSec, swirlProfile) {
+  const centerX = starfieldState.width * (0.58 + Math.sin(starfieldState.elapsedSec * swirlProfile.centerDriftFreqX) * (swirlProfile.centerDriftXPct / 100));
+  const centerY = starfieldState.height * (0.56 + Math.cos(starfieldState.elapsedSec * swirlProfile.centerDriftFreqY) * (swirlProfile.centerDriftYPct / 100));
+  const tilt = (swirlProfile.orbitTiltDeg * Math.PI) / 180;
+  const cosTilt = Math.cos(tilt);
+  const sinTilt = Math.sin(tilt);
 
   starfieldState.stars.forEach((star) => {
-    const driftScale = 0.45 + star.zLayer * 0.85;
-    const phase = star.driftPhase + starfieldState.elapsedSec * profile.driftFrequency;
-    const roamX = Math.sin(phase) * profile.driftAmplitude * driftScale;
-    const roamY = Math.cos(phase * 0.7) * profile.driftAmplitude * 0.24 * driftScale;
+    star.orbitPhase += star.orbitSpeed * deltaSec * swirlProfile.swirlDirection;
+    const breath = 1 + Math.sin(star.radialPhase + starfieldState.elapsedSec * swirlProfile.radialPulseFreq)
+      * swirlProfile.orbitBreathPct
+      * (0.42 + star.zLayer * 0.85);
+    const laneA = star.orbitA * breath;
+    const laneB = star.orbitB * breath;
+    const localX = laneA * Math.cos(star.orbitPhase);
+    const localY = laneB * Math.sin(star.orbitPhase);
+    const jitterScale = swirlProfile.microJitterPxPerSec * (0.2 + star.zLayer * 0.62);
+    const jitterX = Math.cos(star.jitterPhase + starfieldState.elapsedSec * 1.1) * jitterScale;
+    const jitterY = Math.sin(star.jitterPhase * 1.3 + starfieldState.elapsedSec * 0.84) * jitterScale;
 
-    star.x += (star.vx + roamX) * deltaSec;
-    star.y += (star.vy + roamY) * deltaSec;
-
-    wrapStar(star, margin);
+    star.x = centerX + localX * cosTilt - localY * sinTilt + jitterX;
+    star.y = centerY + localX * sinTilt + localY * cosTilt + jitterY;
+    star.radialPhase += deltaSec * (0.85 + star.zLayer * 1.35);
   });
 }
 
@@ -229,159 +208,6 @@ function drawNebula(elapsedSec) {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, starfieldState.width, starfieldState.height);
   });
-}
-
-function drawRingBand(ctx, outerLen, outerHeight, innerLen, innerHeight, fillColor) {
-  ctx.beginPath();
-  ctx.moveTo(-outerLen, 0);
-  ctx.quadraticCurveTo(0, -outerHeight, outerLen, 0);
-  ctx.quadraticCurveTo(0, outerHeight, -outerLen, 0);
-  ctx.closePath();
-
-  ctx.moveTo(-innerLen, 0);
-  ctx.quadraticCurveTo(0, -innerHeight, innerLen, 0);
-  ctx.quadraticCurveTo(0, innerHeight, -innerLen, 0);
-  ctx.closePath();
-
-  ctx.fillStyle = fillColor;
-  ctx.fill("evenodd");
-}
-
-function drawRingBack(ctx, x, y, r, tilt, hoverStrength = 0) {
-  const cfg = RINGED_PLANET;
-  const outerLen = r * cfg.ringOuterScaleX;
-  const outerHeight = r * cfg.ringOuterScaleY;
-  const innerLen = r * cfg.ringInnerScaleX;
-  const innerHeight = r * cfg.ringInnerScaleY;
-
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(tilt);
-
-  ctx.beginPath();
-  ctx.rect(-outerLen * 1.3, -outerHeight * 2.6, outerLen * 2.6, outerHeight * 2.1);
-  ctx.clip();
-
-  drawRingBand(ctx, outerLen, outerHeight, innerLen, innerHeight, cfg.palette.ringBase);
-
-  ctx.strokeStyle = cfg.palette.ringHighlight;
-  ctx.lineWidth = Math.max(1, r * 0.03 * (1 + hoverStrength * 0.45));
-  ctx.beginPath();
-  ctx.moveTo(-outerLen * 0.98, 0);
-  ctx.quadraticCurveTo(0, -outerHeight * 0.88, outerLen * 0.98, 0);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
-function drawPlanetBody(ctx, x, y, r, hoverStrength = 0) {
-  const palette = RINGED_PLANET.palette;
-
-  ctx.save();
-
-  if (hoverStrength > 0.001) {
-    ctx.globalAlpha = Math.min(0.28, hoverStrength * 0.22);
-    ctx.fillStyle = palette.ringHighlight;
-    ctx.beginPath();
-    ctx.arc(x, y, r * 1.28, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  ctx.fillStyle = palette.outerGlow;
-  ctx.beginPath();
-  ctx.arc(x, y, r * 1.12, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = palette.mainAtmosphere;
-  ctx.beginPath();
-  ctx.arc(x, y, r * 1.04, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = palette.warmShadow;
-  ctx.beginPath();
-  ctx.ellipse(x + r * 0.16, y - r * 0.06, r * 0.92, r * 0.86, -0.16, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = palette.interiorCutout;
-  ctx.beginPath();
-  ctx.arc(x - r * 0.02, y + r * 0.02, r * 0.78, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.strokeStyle = palette.mainAtmosphere;
-  ctx.lineWidth = Math.max(1, r * 0.025);
-  ctx.beginPath();
-  ctx.arc(x - r * 0.03, y + r * 0.02, r * 0.69, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
-function drawRingFront(ctx, x, y, r, tilt, hoverStrength = 0) {
-  const cfg = RINGED_PLANET;
-  const outerLen = r * cfg.ringOuterScaleX;
-  const outerHeight = r * cfg.ringOuterScaleY;
-  const innerLen = r * cfg.ringInnerScaleX;
-  const innerHeight = r * cfg.ringInnerScaleY;
-
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(tilt);
-
-  ctx.beginPath();
-  ctx.rect(-outerLen * 1.3, -outerHeight * 0.82, outerLen * 2.6, outerHeight * 1.64);
-  ctx.clip();
-
-  drawRingBand(ctx, outerLen, outerHeight, innerLen, innerHeight, cfg.palette.ringBase);
-
-  ctx.strokeStyle = cfg.palette.ringHighlight;
-  ctx.lineWidth = Math.max(1, r * 0.028 * (1 + hoverStrength * 0.4));
-  ctx.beginPath();
-  ctx.moveTo(-outerLen * 0.99, -outerHeight * 0.08);
-  ctx.quadraticCurveTo(0, -outerHeight * 0.95, outerLen * 0.99, -outerHeight * 0.08);
-  ctx.stroke();
-
-  ctx.strokeStyle = cfg.palette.ringShadowLine;
-  ctx.lineWidth = Math.max(1, r * 0.019 * (1 + hoverStrength * 0.32));
-  ctx.beginPath();
-  ctx.moveTo(-outerLen * 0.93, outerHeight * 0.03);
-  ctx.quadraticCurveTo(0, outerHeight * 0.87, outerLen * 0.93, outerHeight * 0.03);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
-function drawRingedPlanet(elapsedSec) {
-  if (!starfieldState.ctx) {
-    return;
-  }
-
-  const cfg = RINGED_PLANET;
-  const ctx = starfieldState.ctx;
-  const motionScale = getBackgroundMotionScale();
-  const baseX = starfieldState.width * (cfg.xPct / 100);
-  const baseY = starfieldState.height * (cfg.yPct / 100);
-  const baseRadius = Math.min(starfieldState.width, starfieldState.height) * (cfg.radiusPct / 100);
-  const pointerX = starfieldState.pointerX * motionScale;
-  const pointerY = starfieldState.pointerY * motionScale;
-  const x = baseX + Math.sin(elapsedSec * 0.21) * cfg.driftX * 9 * motionScale + pointerX * cfg.parallaxX;
-  const y = baseY + Math.cos(elapsedSec * 0.19) * cfg.driftY * 9 * motionScale + pointerY * cfg.parallaxY;
-
-  let hoverStrength = 0;
-  if (starfieldState.pointerActive) {
-    const pointerPxX = ((starfieldState.pointerX + 1) * 0.5) * starfieldState.width;
-    const pointerPxY = ((starfieldState.pointerY + 1) * 0.5) * starfieldState.height;
-    const distance = Math.hypot(pointerPxX - x, pointerPxY - y);
-    hoverStrength = 1 - clamp(distance / (baseRadius * 3.2), 0, 1);
-  }
-
-  const radius = baseRadius * (1 + hoverStrength * cfg.hoverScale * motionScale);
-  const tiltDeg = cfg.ringTiltDeg + pointerX * cfg.tiltRangeDeg;
-  const tilt = (tiltDeg * Math.PI) / 180;
-
-  drawRingBack(ctx, x, y, radius, tilt, hoverStrength);
-  drawPlanetBody(ctx, x, y, radius, hoverStrength);
-  drawRingFront(ctx, x, y, radius, tilt, hoverStrength);
 }
 
 function drawStars(profile) {
@@ -420,15 +246,12 @@ function renderStarfield(ts) {
   const deltaSec = Math.min(0.05, Math.max(0, (ts - starfieldState.lastTs) / 1000));
   starfieldState.lastTs = ts;
   starfieldState.elapsedSec += deltaSec;
-  const pointerBlend = Math.min(1, deltaSec * 4.2);
-  starfieldState.pointerX += (starfieldState.targetPointerX - starfieldState.pointerX) * pointerBlend;
-  starfieldState.pointerY += (starfieldState.targetPointerY - starfieldState.pointerY) * pointerBlend;
 
   const profile = getStarfieldProfile();
+  const swirlProfile = getStarfieldSwirlProfile();
   starfieldState.ctx.clearRect(0, 0, starfieldState.width, starfieldState.height);
   drawNebula(starfieldState.elapsedSec);
-  drawRingedPlanet(starfieldState.elapsedSec);
-  updateStars(deltaSec, profile);
+  updateStars(deltaSec, swirlProfile);
   drawStars(profile);
 
   starfieldState.rafId = window.requestAnimationFrame(renderStarfield);

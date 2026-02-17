@@ -16,12 +16,6 @@ export const starfieldState = {
   rafId: null,
   lastTs: 0,
   elapsedSec: 0,
-  pointerX: 0,
-  pointerY: 0,
-  targetPointerX: 0,
-  targetPointerY: 0,
-  pointerActive: false,
   isReady: false,
-  resizeBound: false,
-  pointerBound: false
+  resizeBound: false
 };

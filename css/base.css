@@ -111,10 +111,11 @@ textarea:focus-visible {
 .site-title {
   margin: 0.24rem 0 0;
   display: inline-block;
-  font-family: "Major Mono Display", monospace;
+  font-family: "Orbitron", "IBM Plex Mono", monospace;
+  font-weight: 700;
   font-size: clamp(2.2rem, 6.7vw, 4.9rem);
-  line-height: 0.93;
-  letter-spacing: 0.04em;
+  line-height: 0.92;
+  letter-spacing: 0.02em;
   color: #f2f8ff;
   text-shadow:
     0 0 10px rgba(129, 191, 255, 0.24),
@@ -269,9 +270,19 @@ textarea:focus-visible {
   height: 52px;
   border-radius: 10px;
   border: 1px solid var(--border-soft);
+  background-size: cover;
+  background-position: center;
   background:
     radial-gradient(circle at 30% 28%, rgba(175, 230, 255, 0.8), transparent 35%),
     linear-gradient(145deg, #1a3360, #09152d);
+}
+
+.album-art.has-art {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(4, 10, 20, 0.92);
+  box-shadow: 0 0 20px rgba(95, 160, 255, 0.2);
 }
 
 .track-title {

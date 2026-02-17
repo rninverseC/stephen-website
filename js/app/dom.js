@@ -7,6 +7,7 @@ export const dom = {
   statusLine: document.getElementById("status-line"),
   trackTitle: document.getElementById("track-title"),
   trackArtist: document.getElementById("track-artist"),
+  trackArt: document.getElementById("track-art"),
   trackTimeCurrent: document.getElementById("track-time-current"),
   trackTimeTotal: document.getElementById("track-time-total"),
   trackProgress: document.getElementById("track-progress"),

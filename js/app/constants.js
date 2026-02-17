@@ -29,17 +29,20 @@ export const SOCIAL_LINKS = [
 ];
 
 export const STATUS_LINES = [
-  "Building in public, one stable release at a time.",
-  "Currently in deep work mode: shipping and polishing.",
-  "Maintaining clear interfaces and faster feedback loops.",
-  "Testing ideas in orbit before landing them in production."
+  "Curiosity is the engine of progress.",
+  "Invest time with intent.",
+  "Build today with the future in mind.",
+  "Progress begins with noticing what’s wrong."
 ];
 
-export const NOW_PLAYING = {
-  title: "Starlane Echo",
-  artist: "Mock Transmission",
-  durationSec: 243
-};
+export const SPOTIFY_NOW_PLAYING_URL = typeof APP_CONFIG.spotifyNowPlayingUrl === "string"
+  ? APP_CONFIG.spotifyNowPlayingUrl.trim()
+  : "";
+
+const rawSpotifyPollMs = Number(APP_CONFIG.spotifyPollMs);
+export const NOW_PLAYING_POLL_MS = Number.isFinite(rawSpotifyPollMs) && rawSpotifyPollMs >= 5000
+  ? Math.floor(rawSpotifyPollMs)
+  : 15000;
 
 export const DEFAULT_GUESTBOOK_ENTRIES = [
   {
@@ -71,6 +74,43 @@ export const STARFIELD_PROFILE = {
   }
 };
 
+export const STARFIELD_SWIRL_PROFILE = {
+  normal: {
+    swirlDirection: -1,
+    centerDriftXPct: 2.6,
+    centerDriftYPct: 2.1,
+    centerDriftFreqX: 0.045,
+    centerDriftFreqY: 0.037,
+    orbitTiltDeg: 29,
+    orbitAspect: 0.42,
+    orbitLaneMinPct: 18,
+    orbitLaneMaxPct: 112,
+    orbitAngularBaseRadPerSec: 0.05,
+    orbitAngularDepthBoostRadPerSec: 0.2,
+    orbitAngularVariance: 0.28,
+    orbitBreathPct: 0.028,
+    radialPulseFreq: 0.86,
+    microJitterPxPerSec: 0.9
+  },
+  reduced: {
+    swirlDirection: -1,
+    centerDriftXPct: 1,
+    centerDriftYPct: 0.8,
+    centerDriftFreqX: 0.03,
+    centerDriftFreqY: 0.026,
+    orbitTiltDeg: 29,
+    orbitAspect: 0.42,
+    orbitLaneMinPct: 20,
+    orbitLaneMaxPct: 104,
+    orbitAngularBaseRadPerSec: 0.02,
+    orbitAngularDepthBoostRadPerSec: 0.075,
+    orbitAngularVariance: 0.18,
+    orbitBreathPct: 0.012,
+    radialPulseFreq: 0.55,
+    microJitterPxPerSec: 0.3
+  }
+};
+
 export const NEBULA_CLOUDS = [
   {
     xPct: 18,
@@ -91,32 +131,6 @@ export const NEBULA_CLOUDS = [
     driftY: 0.9
   }
 ];
-
-export const RINGED_PLANET = {
-  xPct: 77,
-  yPct: 31,
-  radiusPct: 11.5,
-  driftX: -0.22,
-  driftY: 0.14,
-  parallaxX: 52,
-  parallaxY: 28,
-  tiltRangeDeg: 11,
-  hoverScale: 0.14,
-  palette: {
-    outerGlow: "#f7b65e",
-    mainAtmosphere: "#e8e5d8",
-    warmShadow: "#dbc6a9",
-    interiorCutout: "#050507",
-    ringBase: "#f6ae4b",
-    ringHighlight: "#ffd18d",
-    ringShadowLine: "#e7d9bf"
-  },
-  ringTiltDeg: -14,
-  ringOuterScaleX: 1.95,
-  ringOuterScaleY: 0.24,
-  ringInnerScaleX: 1.34,
-  ringInnerScaleY: 0.085
-};
 
 export const DEFAULT_EFFECT_SETTINGS = {
   stars: true
