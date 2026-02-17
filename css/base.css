@@ -1,6 +1,7 @@
 :root {
-  --font-body: "IBM Plex Mono", "VT323", monospace;
+  --font-body: "VT323", "IBM Plex Mono", monospace;
   --font-display: "Jersey 10", "Silkscreen", monospace;
+  --content-size: 0.95rem;
   --bg-main: #010408;
   --bg-panel: #000;
   --bg-card: #000;
@@ -39,8 +40,11 @@ body {
   position: relative;
   color: var(--text-main);
   font-family: var(--font-body);
+  font-weight: 400;
   line-height: 1.32;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background:
     radial-gradient(circle at 50% 0%, rgba(8, 30, 36, 0.35), transparent 54%),
     #000;
@@ -176,7 +180,7 @@ textarea:focus-visible {
   margin: 0 0 0.8rem;
   color: #28929c;
   font-family: var(--font-display);
-  font-size: 1.55rem;
+  font-size: 1.8rem;
   line-height: 1.05;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -186,7 +190,7 @@ textarea:focus-visible {
 .panel p {
   margin: 0 0 0.85rem;
   color: #fff;
-  font-size: 0.93rem;
+  font-size: var(--content-size);
 }
 
 .panel p:last-child {
@@ -212,19 +216,19 @@ textarea:focus-visible {
 .project-card h3 {
   margin: 0;
   color: var(--accent);
-  font-size: 0.98rem;
+  font-size: var(--content-size);
 }
 
 .project-card p {
   margin: 0.4rem 0 0;
   color: var(--text-soft);
-  font-size: 0.88rem;
+  font-size: var(--content-size);
 }
 
 .project-tags {
   margin-top: 0.5rem;
   color: #fff;
-  font-size: 0.74rem;
+  font-size: var(--content-size);
 }
 
 .link-list {
@@ -240,6 +244,7 @@ textarea:focus-visible {
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 0.18rem 0.3rem;
+  font-size: var(--content-size);
 }
 
 .link-list a:hover,
@@ -254,19 +259,16 @@ textarea:focus-visible {
   gap: 0.45rem;
   margin-bottom: 0.45rem;
   color: #fff;
+  font-size: var(--content-size);
 }
 
 .status-online-row {
   margin-bottom: 0.6rem;
-  padding: 0.38rem 0.5rem;
-  border: 1px solid rgba(71, 255, 107, 0.4);
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 40% 50%, rgba(53, 255, 100, 0.22), transparent 62%),
-    rgba(0, 0, 0, 0.9);
-  box-shadow:
-    inset 0 0 20px rgba(59, 255, 107, 0.2),
-    0 0 16px rgba(56, 255, 116, 0.2);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .status-dot {
@@ -285,7 +287,7 @@ textarea:focus-visible {
 .status-prefix {
   font-family: var(--font-body);
   color: #fff;
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   letter-spacing: 0.02em;
 }
 
@@ -304,6 +306,7 @@ textarea:focus-visible {
   color: var(--text-soft);
   border-left: 2px solid var(--border-main);
   padding-left: 0.55rem;
+  font-size: var(--content-size);
 }
 
 .track-card {
@@ -336,7 +339,7 @@ textarea:focus-visible {
 .track-title {
   margin: 0;
   color: var(--text-main);
-  font-size: 0.93rem;
+  font-size: 1rem;
 }
 
 .track-artist {

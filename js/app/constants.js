@@ -53,14 +53,14 @@ export const DEFAULT_GUESTBOOK_ENTRIES = [
 ];
 
 export const SNOW_DENSITY = {
-  normal: 1500,
-  reduced: 1300
+  normal: 2000,
+  reduced: 1800
 };
 
 export const SNOW_PROFILE = {
   normal: {
-    sizeMinPx: 2.4,
-    sizeMaxPx: 5.8,
+    sizeMinPx: 3.1,
+    sizeMaxPx: 7.4,
     durationMinSec: 7,
     durationMaxSec: 21,
     straightRatio: 0.45,
@@ -72,8 +72,8 @@ export const SNOW_PROFILE = {
     alphaMax: 0.95
   },
   reduced: {
-    sizeMinPx: 2,
-    sizeMaxPx: 4.4,
+    sizeMinPx: 2.6,
+    sizeMaxPx: 5.8,
     durationMinSec: 10,
     durationMaxSec: 26,
     straightRatio: 0.65,

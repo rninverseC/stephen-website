@@ -99,7 +99,7 @@ function renderGuestbookAdminState() {
   } else if (isAdminUser(appState.adminUser)) {
     setGuestbookNote("Admin mode enabled. You can remove messages.");
   } else {
-    setGuestbookNote("Public mode: anyone can post, only admin can remove.");
+    setGuestbookNote("Welcome");
   }
 }
 
