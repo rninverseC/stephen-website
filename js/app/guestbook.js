@@ -191,6 +191,7 @@ function formatEntryTime(iso) {
   return date.toLocaleString([], {
     month: "short",
     day: "numeric",
+    hour12: false,
     hour: "2-digit",
     minute: "2-digit"
   });
