@@ -3,6 +3,8 @@ import {
   PROJECTS,
   SOCIAL_LINKS,
   STATUS_LINES,
+  BIRTH_DATE_ISO,
+  AGE_DECIMAL_PLACES,
   SPOTIFY_NOW_PLAYING_URL,
   NOW_PLAYING_POLL_MS
 } from "./constants.js";
@@ -11,6 +13,9 @@ import { dom } from "./dom.js";
 let nowPlayingPollTimer = null;
 let nowPlayingTickTimer = null;
 let nowPlayingRuntime = null;
+const MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
+const AGE_UPDATE_INTERVAL_MS = 250;
+const birthDateMs = Date.parse(BIRTH_DATE_ISO);
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -86,19 +91,46 @@ function formatClock(date) {
   });
 }
 
-function updateClock() {
-  if (!dom.localClock) {
+function formatAgeYears(nowMs) {
+  if (!Number.isFinite(birthDateMs)) {
+    return "--";
+  }
+
+  const ageYears = Math.max(0, (nowMs - birthDateMs) / MS_PER_YEAR);
+  return ageYears.toFixed(AGE_DECIMAL_PLACES);
+}
+
+function updateAgeLine(nowMs) {
+  if (!dom.ageLine) {
     return;
   }
 
+  dom.ageLine.textContent = `I am ${formatAgeYears(nowMs)} years.`;
+}
+
+function updateClock() {
   const now = new Date();
-  dom.localClock.textContent = formatClock(now);
-  dom.localClock.dateTime = now.toISOString();
+
+  if (dom.localClock) {
+    dom.localClock.textContent = formatClock(now);
+    dom.localClock.dateTime = now.toISOString();
+  }
 }
 
 function initClock() {
   updateClock();
   window.setInterval(updateClock, 1000);
+}
+
+function initAgeLine() {
+  if (!dom.ageLine) {
+    return;
+  }
+
+  updateAgeLine(Date.now());
+  window.setInterval(() => {
+    updateAgeLine(Date.now());
+  }, AGE_UPDATE_INTERVAL_MS);
 }
 
 function initStatusLine() {
@@ -460,6 +492,7 @@ export function initWidgets() {
   renderLinkList(dom.connectLinks, SOCIAL_LINKS);
   renderProjects();
   initClock();
+  initAgeLine();
   initStatusLine();
   initNowPlaying();
 }

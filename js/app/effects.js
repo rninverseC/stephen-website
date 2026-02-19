@@ -16,6 +16,11 @@ const SNOW_LAYER_DISTRIBUTION = {
 };
 const SNOW_LAYER_REMAINDER_ORDER = ["mid", "front", "back"];
 const SNOW_LAYER_ORDER = ["front", "mid", "back"];
+const LEAF_SHAPE_THRESHOLDS = {
+  a: 0.35,
+  b: 0.65,
+  c: 0.85
+};
 
 function loadEffectSettings() {
   const stored = readStorage(STORAGE_KEYS.effects, DEFAULT_EFFECT_SETTINGS);
@@ -96,9 +101,24 @@ function clamp01(value) {
   return Math.min(1, Math.max(0, value));
 }
 
+function pickLeafShapeClass() {
+  const roll = Math.random();
+  if (roll < LEAF_SHAPE_THRESHOLDS.a) {
+    return "leaf-shape-a";
+  }
+  if (roll < LEAF_SHAPE_THRESHOLDS.b) {
+    return "leaf-shape-b";
+  }
+  if (roll < LEAF_SHAPE_THRESHOLDS.c) {
+    return "leaf-shape-c";
+  }
+  return "leaf-shape-d";
+}
+
 function createLayerFlake(profile, layerName, layerProfile) {
   const flake = document.createElement("span");
   const z = random(0.35, 1);
+  const leafShapeClass = pickLeafShapeClass();
   const baseSize = profile.sizeMinPx + (profile.sizeMaxPx - profile.sizeMinPx) * Math.pow(z, 1.2);
   const size = baseSize * layerProfile.sizeMul;
   const baseDuration = profile.durationMaxSec - (profile.durationMaxSec - profile.durationMinSec) * Math.pow(z, 0.95);
@@ -109,18 +129,34 @@ function createLayerFlake(profile, layerName, layerProfile) {
     : layerName === "mid"
       ? alphaRaw * 0.88
       : alphaRaw * 0.9;
+  const driftMid = random(layerProfile.driftMidX[0], layerProfile.driftMidX[1]);
+  const driftEnd = random(layerProfile.driftEndX[0], layerProfile.driftEndX[1]);
+  const driftLate = (driftMid + driftEnd) * 0.5 + random(-4.8, 4.8);
+  const travelLateY = layerProfile.travelMidY + (layerProfile.travelEndY - layerProfile.travelMidY) * 0.78;
+  const leafRotStart = random(-120, 120);
+  const leafRotMid = leafRotStart + random(-80, 80);
+  const leafRotLate = leafRotMid + random(-70, 70);
+  const leafRotEnd = leafRotLate + random(-60, 60);
 
-  flake.className = `snowflake snowflake-${layerName}`;
+  flake.className = `snowflake snowflake-${layerName} ${leafShapeClass}`;
   flake.style.setProperty("--x", `${random(layerProfile.spawnX[0], layerProfile.spawnX[1]).toFixed(2)}vw`);
   flake.style.setProperty("--y", `${random(layerProfile.spawnY[0], layerProfile.spawnY[1]).toFixed(2)}vh`);
   flake.style.setProperty("--size", `${size.toFixed(2)}px`);
   flake.style.setProperty("--duration", `${duration.toFixed(2)}s`);
   flake.style.setProperty("--delay", `${random(-26, 0).toFixed(2)}s`);
   flake.style.setProperty("--alpha", `${clamp01(alphaScaled).toFixed(3)}`);
-  flake.style.setProperty("--drift-mid", `${random(layerProfile.driftMidX[0], layerProfile.driftMidX[1]).toFixed(2)}vw`);
-  flake.style.setProperty("--drift-end", `${random(layerProfile.driftEndX[0], layerProfile.driftEndX[1]).toFixed(2)}vw`);
+  flake.style.setProperty("--drift-mid", `${driftMid.toFixed(2)}vw`);
+  flake.style.setProperty("--drift-late", `${driftLate.toFixed(2)}vw`);
+  flake.style.setProperty("--drift-end", `${driftEnd.toFixed(2)}vw`);
   flake.style.setProperty("--travel-mid-y", `${layerProfile.travelMidY}`);
+  flake.style.setProperty("--travel-late-y", `${travelLateY.toFixed(2)}`);
   flake.style.setProperty("--travel-end-y", `${layerProfile.travelEndY}`);
+  flake.style.setProperty("--leaf-rot-start", `${leafRotStart.toFixed(2)}deg`);
+  flake.style.setProperty("--leaf-rot-mid", `${leafRotMid.toFixed(2)}deg`);
+  flake.style.setProperty("--leaf-rot-late", `${leafRotLate.toFixed(2)}deg`);
+  flake.style.setProperty("--leaf-rot-end", `${leafRotEnd.toFixed(2)}deg`);
+  flake.style.setProperty("--leaf-scale-mid", `${random(0.92, 1.1).toFixed(3)}`);
+  flake.style.setProperty("--leaf-scale-end", `${random(0.9, 1.16).toFixed(3)}`);
 
   return flake;
 }

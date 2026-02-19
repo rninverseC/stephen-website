@@ -5,6 +5,7 @@ export const dom = {
   connectLinks: document.getElementById("connect-links"),
   localClock: document.getElementById("local-clock"),
   statusLine: document.getElementById("status-line"),
+  ageLine: document.getElementById("age-line"),
   trackTitle: document.getElementById("track-title"),
   trackArtist: document.getElementById("track-artist"),
   trackArt: document.getElementById("track-art"),

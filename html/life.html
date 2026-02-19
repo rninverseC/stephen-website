@@ -7,7 +7,7 @@
   <meta name="description" content="Life page for Stephen Ye.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jersey+10&family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/animations.css">
 </head>
@@ -40,12 +40,11 @@
         </section>
 
         <section class="panel side-panel" data-widget="status">
-          <p class="status-row status-online-row">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span class="status-prefix">I'm</span>
-            <span class="status-online-text">ONLINE!</span>
-          </p>
+          <h2>Status</h2>
+          <p id="age-line" class="status-row"></p>
+          <p id="age-line-note" class="status-line"></p>
           <p class="status-row">Local time: <time id="local-clock" datetime=""></time></p>
+          <p id="local-time-note" class="status-line"></p>
           <p id="status-line" class="status-line"></p>
         </section>
 
@@ -77,7 +76,7 @@
           <div class="effect-row">
             <label for="toggle-snow">
               <input id="toggle-snow" type="checkbox" data-toggle="snow">
-              Snow
+              Leaves
             </label>
           </div>
         </section>

@@ -31,6 +31,9 @@ export const STATUS_LINES = [
   "Don't Roast Me Lad 😭"
 ];
 
+export const BIRTH_DATE_ISO = "2008-10-22T00:00:00Z";
+export const AGE_DECIMAL_PLACES = 10;
+
 export const SPOTIFY_NOW_PLAYING_URL = typeof APP_CONFIG.spotifyNowPlayingUrl === "string"
   ? APP_CONFIG.spotifyNowPlayingUrl.trim()
   : "";
@@ -49,35 +52,35 @@ export const DEFAULT_GUESTBOOK_ENTRIES = [
 ];
 
 export const SNOW_DENSITY = {
-  normal: 2000,
-  reduced: 1800
+  normal: 220,
+  reduced: 140
 };
 
 export const SNOW_PROFILE = {
   normal: {
-    sizeMinPx: 3.1,
-    sizeMaxPx: 7.4,
-    durationMinSec: 7,
-    durationMaxSec: 21,
-    straightRatio: 0.45,
-    straightMidDriftVw: 1.2,
-    straightEndDriftVw: 2.4,
-    swayMidDriftVw: 8,
-    swayEndDriftVw: 16,
-    alphaMin: 0.35,
-    alphaMax: 0.95
+    sizeMinPx: 7.2,
+    sizeMaxPx: 14.8,
+    durationMinSec: 14,
+    durationMaxSec: 34,
+    straightRatio: 0.12,
+    straightMidDriftVw: 1.4,
+    straightEndDriftVw: 3.2,
+    swayMidDriftVw: 11,
+    swayEndDriftVw: 24,
+    alphaMin: 0.48,
+    alphaMax: 0.94
   },
   reduced: {
-    sizeMinPx: 2.6,
-    sizeMaxPx: 5.8,
-    durationMinSec: 10,
-    durationMaxSec: 26,
-    straightRatio: 0.65,
-    straightMidDriftVw: 0.8,
-    straightEndDriftVw: 1.5,
-    swayMidDriftVw: 4,
-    swayEndDriftVw: 7,
-    alphaMin: 0.3,
+    sizeMinPx: 6.6,
+    sizeMaxPx: 12.2,
+    durationMinSec: 20,
+    durationMaxSec: 40,
+    straightRatio: 0.2,
+    straightMidDriftVw: 1.1,
+    straightEndDriftVw: 2.4,
+    swayMidDriftVw: 7,
+    swayEndDriftVw: 14,
+    alphaMin: 0.36,
     alphaMax: 0.8
   }
 };
@@ -85,66 +88,66 @@ export const SNOW_PROFILE = {
 export const SNOW_LAYER_PROFILE = {
   normal: {
     front: {
-      sizeMul: 1.28,
-      durationMul: 1.4,
-      spawnX: [-20, 98],
-      spawnY: [-36, 102],
-      driftMidX: [10, 20],
-      driftEndX: [24, 42],
-      travelMidY: 56,
-      travelEndY: 118
+      sizeMul: 1.16,
+      durationMul: 1.2,
+      spawnX: [-18, 102],
+      spawnY: [-28, 96],
+      driftMidX: [8, 20],
+      driftEndX: [20, 34],
+      travelMidY: 58,
+      travelEndY: 116
     },
     mid: {
-      sizeMul: 0.98,
-      durationMul: 2.7,
-      spawnX: [-14, 104],
-      spawnY: [-22, 102],
-      driftMidX: [14, 30],
-      driftEndX: [34, 60],
-      travelMidY: 42,
-      travelEndY: 96
+      sizeMul: 0.95,
+      durationMul: 1.6,
+      spawnX: [-14, 106],
+      spawnY: [-24, 98],
+      driftMidX: [-12, 14],
+      driftEndX: [-20, 22],
+      travelMidY: 50,
+      travelEndY: 104
     },
     back: {
-      sizeMul: 0.84,
-      durationMul: 4.1,
-      spawnX: [34, 130],
-      spawnY: [-40, 28],
-      driftMidX: [-24, -12],
-      driftEndX: [-54, -28],
-      travelMidY: 34,
-      travelEndY: 102
+      sizeMul: 0.78,
+      durationMul: 2.2,
+      spawnX: [-10, 110],
+      spawnY: [-20, 100],
+      driftMidX: [-18, 12],
+      driftEndX: [-30, 16],
+      travelMidY: 46,
+      travelEndY: 108
     }
   },
   reduced: {
     front: {
-      sizeMul: 1.2,
+      sizeMul: 1.1,
       durationMul: 1.3,
-      spawnX: [-18, 100],
-      spawnY: [-28, 100],
-      driftMidX: [7, 14],
-      driftEndX: [16, 30],
-      travelMidY: 48,
-      travelEndY: 108
+      spawnX: [-14, 102],
+      spawnY: [-24, 94],
+      driftMidX: [5, 12],
+      driftEndX: [12, 22],
+      travelMidY: 52,
+      travelEndY: 112
     },
     mid: {
-      sizeMul: 0.95,
-      durationMul: 1.9,
+      sizeMul: 0.92,
+      durationMul: 1.8,
       spawnX: [-12, 104],
-      spawnY: [-18, 100],
-      driftMidX: [10, 20],
-      driftEndX: [22, 40],
-      travelMidY: 34,
-      travelEndY: 78
+      spawnY: [-18, 98],
+      driftMidX: [-8, 10],
+      driftEndX: [-14, 14],
+      travelMidY: 42,
+      travelEndY: 92
     },
     back: {
-      sizeMul: 0.82,
-      durationMul: 2.6,
-      spawnX: [34, 128],
-      spawnY: [-30, 24],
-      driftMidX: [-16, -8],
-      driftEndX: [-34, -18],
-      travelMidY: 26,
-      travelEndY: 74
+      sizeMul: 0.74,
+      durationMul: 2.4,
+      spawnX: [-8, 108],
+      spawnY: [-16, 100],
+      driftMidX: [-12, 8],
+      driftEndX: [-20, 12],
+      travelMidY: 38,
+      travelEndY: 96
     }
   }
 };
