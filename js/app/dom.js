@@ -2,6 +2,7 @@ export const dom = {
   snowLayer: document.getElementById("snow-layer"),
   pagesLinks: document.getElementById("pages-links"),
   projectsGrid: document.getElementById("projects-grid"),
+  albumGrid: document.getElementById("album-grid"),
   connectLinks: document.getElementById("connect-links"),
   localClock: document.getElementById("local-clock"),
   statusLine: document.getElementById("status-line"),

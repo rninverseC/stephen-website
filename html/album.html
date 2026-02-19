@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/animations.css">
 </head>
-<body id="top" data-snow="on">
+<body id="top" data-snow="on" class="subpage">
   <div id="snow-layer" class="snow-overlay fx-snow" aria-hidden="true"></div>
   <div class="fx-root" aria-hidden="true">
     <div class="fx-vignette"></div>
@@ -28,57 +28,17 @@
       <main class="main-column">
         <section class="panel" id="album">
           <h2>Album</h2>
+          <p class="site-tagline">A photo book in four chapters: Life, Soccer, China, and Food. Click a chapter and flip through.</p>
+          <div id="album-grid" class="album-book" aria-live="polite"></div>
         </section>
       </main>
 
-      <aside class="side-column" aria-label="Sidebar widgets">
+      <aside class="side-column" aria-label="Page navigation">
         <section class="panel side-panel" data-widget="pages">
           <h2>Pages</h2>
           <nav aria-label="Site pages">
             <ul id="pages-links" class="link-list"></ul>
           </nav>
-        </section>
-
-        <section class="panel side-panel" data-widget="status">
-          <h2>Status</h2>
-          <p id="age-line" class="status-row"></p>
-          <p id="age-line-note" class="status-line"></p>
-          <p class="status-row">Local time: <time id="local-clock" datetime=""></time></p>
-          <p id="local-time-note" class="status-line"></p>
-          <p id="status-line" class="status-line"></p>
-        </section>
-
-        <section class="panel side-panel" data-widget="now-playing">
-          <h2>IM LISTENING TO:</h2>
-          <article class="track-card" aria-label="Current track">
-            <div id="track-art" class="album-art" aria-hidden="true"></div>
-            <div>
-              <p id="track-title" class="track-title"></p>
-              <p id="track-artist" class="track-artist"></p>
-            </div>
-          </article>
-          <div class="track-time-row">
-            <span id="track-time-current">0:00</span>
-            <span id="track-time-total">0:00</span>
-          </div>
-          <div class="track-progress-shell" role="progressbar" aria-label="Track progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div id="track-progress" class="track-progress"></div>
-          </div>
-        </section>
-
-        <section class="panel side-panel" data-widget="connect">
-          <h2>Connect</h2>
-          <ul id="connect-links" class="link-list"></ul>
-        </section>
-
-        <section class="panel side-panel" data-widget="effects">
-          <h2>Effects</h2>
-          <div class="effect-row">
-            <label for="toggle-snow">
-              <input id="toggle-snow" type="checkbox" data-toggle="snow">
-              Leaves
-            </label>
-          </div>
         </section>
       </aside>
     </div>

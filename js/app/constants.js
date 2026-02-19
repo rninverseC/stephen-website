@@ -23,12 +23,45 @@ export const NAV_ITEMS = [
 
 export const PROJECTS = [];
 
+export const ALBUM_IMAGE_BASE_PATH = "../assets/album/";
+
+export const ALBUM_SECTIONS = [
+  {
+    id: "life",
+    title: "Life",
+    images: [
+      // { file: "life-01.jpg", alt: "Random moment", caption: "Life lately" }
+    ]
+  },
+  {
+    id: "soccer",
+    title: "Soccer",
+    images: [
+      // { file: "soccer-01.jpg", alt: "On the field", caption: "Game day" }
+    ]
+  },
+  {
+    id: "china",
+    title: "China",
+    images: [
+      // { file: "china-01.jpg", alt: "Street in China", caption: "Trip memory" }
+    ]
+  },
+  {
+    id: "food",
+    title: "Food",
+    images: [
+      // { file: "food-01.jpg", alt: "Favorite meal", caption: "Food memory" }
+    ]
+  }
+];
+
 export const SOCIAL_LINKS = [
   { label: "GitHub", href: "https://github.com/rninverseC", external: true }
 ];
 
 export const STATUS_LINES = [
-  "Don't Roast Me Lad 😭"
+  "Don't roast me lad 😭"
 ];
 
 export const BIRTH_DATE_ISO = "2008-10-22T00:00:00Z";

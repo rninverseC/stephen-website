@@ -1,6 +1,8 @@
 import {
   NAV_ITEMS,
   PROJECTS,
+  ALBUM_SECTIONS,
+  ALBUM_IMAGE_BASE_PATH,
   SOCIAL_LINKS,
   STATUS_LINES,
   BIRTH_DATE_ISO,
@@ -82,6 +84,245 @@ function renderProjects() {
   dom.projectsGrid.appendChild(fragment);
 }
 
+function resolveAlbumImageSrc(entry) {
+  const rawSource = typeof entry === "string"
+    ? entry.trim()
+    : typeof entry?.src === "string"
+      ? entry.src.trim()
+      : typeof entry?.file === "string"
+        ? entry.file.trim()
+        : "";
+
+  if (!rawSource) {
+    return "";
+  }
+
+  if (
+    rawSource.startsWith("http://") ||
+    rawSource.startsWith("https://") ||
+    rawSource.startsWith("data:") ||
+    rawSource.startsWith("/") ||
+    rawSource.startsWith("./") ||
+    rawSource.startsWith("../")
+  ) {
+    return rawSource;
+  }
+
+  return `${ALBUM_IMAGE_BASE_PATH}${rawSource}`;
+}
+
+function buildAlbumFigure(entry, fallbackLabel) {
+  const src = resolveAlbumImageSrc(entry);
+  if (!src) {
+    return null;
+  }
+
+  const figure = document.createElement("figure");
+  figure.className = "album-item";
+
+  const image = document.createElement("img");
+  image.src = src;
+  image.loading = "lazy";
+  image.decoding = "async";
+  image.alt = typeof entry === "object" && typeof entry?.alt === "string" && entry.alt.trim()
+    ? entry.alt.trim()
+    : typeof entry === "object" && typeof entry?.caption === "string" && entry.caption.trim()
+      ? entry.caption.trim()
+      : fallbackLabel;
+  figure.appendChild(image);
+
+  if (typeof entry === "object" && typeof entry?.caption === "string" && entry.caption.trim()) {
+    const caption = document.createElement("figcaption");
+    caption.textContent = entry.caption.trim();
+    figure.appendChild(caption);
+  }
+
+  return figure;
+}
+
+function normalizeAlbumSections() {
+  if (!Array.isArray(ALBUM_SECTIONS)) {
+    return [];
+  }
+
+  return ALBUM_SECTIONS.map((section, index) => ({
+    id: typeof section?.id === "string" && section.id.trim()
+      ? section.id.trim()
+      : `section-${index + 1}`,
+    title: typeof section?.title === "string" && section.title.trim()
+      ? section.title.trim()
+      : `Section ${index + 1}`,
+    images: Array.isArray(section?.images) ? section.images : []
+  }));
+}
+
+function buildAlbumBookPage(section) {
+  const page = document.createElement("article");
+  page.className = "album-book-page";
+  page.id = `album-book-page-${section.id}`;
+  page.dataset.sectionId = section.id;
+  page.setAttribute("role", "tabpanel");
+  page.setAttribute("aria-labelledby", `album-book-tab-${section.id}`);
+
+  const inner = document.createElement("div");
+  inner.className = "album-book-page-inner";
+
+  const title = document.createElement("h3");
+  title.className = "album-chapter-title";
+  title.textContent = section.title;
+  inner.appendChild(title);
+
+  const grid = document.createElement("div");
+  grid.className = "album-grid";
+
+  let addedCount = 0;
+  section.images.forEach((entry, imageIndex) => {
+    const figure = buildAlbumFigure(entry, `${section.title} photo ${imageIndex + 1}`);
+    if (!figure) {
+      return;
+    }
+    grid.appendChild(figure);
+    addedCount += 1;
+  });
+
+  if (addedCount === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty-note";
+    empty.textContent = `Add photos to "${section.title}" in ALBUM_SECTIONS.`;
+    grid.appendChild(empty);
+  }
+
+  inner.appendChild(grid);
+  page.appendChild(inner);
+  return page;
+}
+
+function renderAlbum() {
+  if (!dom.albumGrid) {
+    return;
+  }
+
+  dom.albumGrid.textContent = "";
+  const sections = normalizeAlbumSections();
+
+  if (sections.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "empty-note";
+    empty.textContent = "Define ALBUM_SECTIONS in js/app/constants.js.";
+    dom.albumGrid.appendChild(empty);
+    return;
+  }
+
+  const shell = document.createElement("div");
+  shell.className = "album-book-shell";
+
+  const nav = document.createElement("div");
+  nav.className = "album-book-nav";
+  nav.setAttribute("role", "tablist");
+  nav.setAttribute("aria-label", "Album chapters");
+
+  const frame = document.createElement("div");
+  frame.className = "album-book-frame";
+
+  let activeIndex = 0;
+  let activePage = buildAlbumBookPage(sections[activeIndex]);
+  activePage.classList.add("is-active");
+  frame.appendChild(activePage);
+
+  const tabButtons = [];
+
+  function syncTabs(selectedIndex = activeIndex) {
+    tabButtons.forEach((button, index) => {
+      const isActive = index === selectedIndex;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-selected", isActive ? "true" : "false");
+      button.tabIndex = isActive ? 0 : -1;
+    });
+  }
+
+  let isAnimating = false;
+
+  function switchChapter(nextIndex) {
+    if (nextIndex === activeIndex || isAnimating || nextIndex < 0 || nextIndex >= sections.length) {
+      return;
+    }
+
+    syncTabs(nextIndex);
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      || document.body.classList.contains("reduced-motion");
+    const directionClass = nextIndex > activeIndex ? "flip-forward" : "flip-backward";
+    const nextPage = buildAlbumBookPage(sections[nextIndex]);
+
+    if (reduceMotion) {
+      activePage.remove();
+      nextPage.classList.add("is-active");
+      frame.appendChild(nextPage);
+      activePage = nextPage;
+      activeIndex = nextIndex;
+      syncTabs();
+      return;
+    }
+
+    isAnimating = true;
+    activePage.classList.remove("is-active");
+    activePage.classList.add("is-leaving", directionClass);
+    nextPage.classList.add("is-entering", directionClass);
+    frame.appendChild(nextPage);
+
+    let finished = false;
+    const finish = () => {
+      if (finished) {
+        return;
+      }
+      finished = true;
+
+      activePage.remove();
+      nextPage.classList.remove("is-entering", directionClass);
+      nextPage.classList.add("is-active");
+      activePage = nextPage;
+      activeIndex = nextIndex;
+      isAnimating = false;
+      syncTabs();
+    };
+
+    nextPage.addEventListener("animationend", finish, { once: true });
+    window.setTimeout(finish, 760);
+  }
+
+  sections.forEach((section, index) => {
+    const tab = document.createElement("button");
+    tab.type = "button";
+    tab.className = "album-book-tab";
+    tab.id = `album-book-tab-${section.id}`;
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-controls", `album-book-page-${section.id}`);
+    tab.textContent = section.title;
+    tab.addEventListener("click", () => {
+      switchChapter(index);
+    });
+    tabButtons.push(tab);
+    nav.appendChild(tab);
+  });
+
+  nav.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+      return;
+    }
+
+    event.preventDefault();
+    const delta = event.key === "ArrowRight" ? 1 : -1;
+    const nextIndex = (activeIndex + delta + sections.length) % sections.length;
+    switchChapter(nextIndex);
+  });
+
+  syncTabs();
+
+  shell.appendChild(nav);
+  shell.appendChild(frame);
+  dom.albumGrid.appendChild(shell);
+}
+
 function formatClock(date) {
   return date.toLocaleTimeString([], {
     hour12: false,
@@ -105,7 +346,7 @@ function updateAgeLine(nowMs) {
     return;
   }
 
-  dom.ageLine.textContent = `I am ${formatAgeYears(nowMs)} years.`;
+  dom.ageLine.textContent = `I am ${formatAgeYears(nowMs)} years`;
 }
 
 function updateClock() {
@@ -491,6 +732,7 @@ export function initWidgets() {
   renderLinkList(dom.pagesLinks, NAV_ITEMS);
   renderLinkList(dom.connectLinks, SOCIAL_LINKS);
   renderProjects();
+  renderAlbum();
   initClock();
   initAgeLine();
   initStatusLine();
