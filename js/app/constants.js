@@ -28,10 +28,7 @@ export const SOCIAL_LINKS = [
 ];
 
 export const STATUS_LINES = [
-  "Curiosity is the engine of progress.",
-  "Invest time with intent.",
-  "Build today with the future in mind.",
-  "Progress begins with noticing what’s wrong."
+  "Don't Roast Me Lad 😭"
 ];
 
 export const SPOTIFY_NOW_PLAYING_URL = typeof APP_CONFIG.spotifyNowPlayingUrl === "string"
