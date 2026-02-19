@@ -188,7 +188,6 @@ function buildAlbumBookPage(section) {
   if (addedCount === 0) {
     const empty = document.createElement("p");
     empty.className = "empty-note";
-    empty.textContent = `Add photos to "${section.title}" in ALBUM_SECTIONS.`;
     grid.appendChild(empty);
   }
 
