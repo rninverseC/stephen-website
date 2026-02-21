@@ -1,5 +1,5 @@
 export const dom = {
-  snowLayer: document.getElementById("snow-layer"),
+  physicsLayer: document.getElementById("physics-layer"),
   pagesLinks: document.getElementById("pages-links"),
   projectsGrid: document.getElementById("projects-grid"),
   albumGrid: document.getElementById("album-grid"),
@@ -26,8 +26,7 @@ export const dom = {
   adminEmail: document.getElementById("admin-email"),
   adminPassword: document.getElementById("admin-password"),
   adminLogin: document.getElementById("admin-login"),
-  adminLogout: document.getElementById("admin-logout"),
-  toggleSnow: document.getElementById("toggle-snow")
+  adminLogout: document.getElementById("admin-logout")
 };
 
 export const reduceMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");

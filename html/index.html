@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/animations.css">
 </head>
-<body id="top" data-snow="on">
-  <div id="snow-layer" class="snow-overlay fx-snow" aria-hidden="true"></div>
+<body id="top" data-physics="on">
+  <canvas id="physics-layer" class="physics-overlay fx-physics" aria-hidden="true"></canvas>
   <div class="fx-root" aria-hidden="true">
     <div class="fx-vignette"></div>
     <div class="scanline"></div>
@@ -109,12 +109,6 @@
 
         <section class="panel side-panel" data-widget="effects">
           <h2>Effects</h2>
-          <div class="effect-row">
-            <label for="toggle-snow">
-              <input id="toggle-snow" type="checkbox" data-toggle="snow">
-              Leaves
-            </label>
-          </div>
         </section>
       </aside>
     </div>

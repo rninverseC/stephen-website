@@ -57,39 +57,6 @@
   animation-delay: 520ms;
 }
 
-.snowflake {
-  position: absolute;
-  left: var(--x, 50vw);
-  top: var(--y, -10vh);
-  width: var(--size, 2px);
-  height: var(--size, 2px);
-  animation: snowfall var(--duration, 14s) linear infinite;
-  animation-delay: var(--delay, 0s);
-  will-change: transform, opacity;
-}
-
-.snowflake-back,
-.snowflake-mid {
-  border-radius: 999px;
-  background: rgba(224, 236, 255, calc(var(--alpha, 0.78) * 0.86));
-}
-
-.snowflake-back {
-  box-shadow: 0 0 calc(var(--size, 2px) * 1.1) rgba(176, 203, 239, 0.4);
-}
-
-.snowflake-mid {
-  box-shadow: 0 0 calc(var(--size, 2px) * 1.4) rgba(137, 182, 235, 0.36);
-}
-
-.snowflake-front {
-  border-radius: 2px;
-  background-image: linear-gradient(45deg, rgba(255, 245, 227, 0), rgba(255, 245, 227, 0.95), rgba(255, 245, 227, 0));
-  box-shadow:
-    0 0 calc(var(--size, 2px) * 1.2) rgba(222, 180, 108, 0.3),
-    0 0 calc(var(--size, 2px) * 2) rgba(187, 222, 255, 0.28);
-}
-
 @keyframes headerReveal {
   0% {
     transform: translate3d(0, -12px, 0);
@@ -114,10 +81,10 @@
 
 @keyframes statusPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(27, 152, 87, 0.44);
+    box-shadow: 0 0 0 0 rgba(130, 185, 225, 0.42);
   }
   100% {
-    box-shadow: 0 0 0 12px rgba(27, 152, 87, 0);
+    box-shadow: 0 0 0 12px rgba(130, 185, 225, 0);
   }
 }
 
@@ -126,28 +93,10 @@
     filter: saturate(0.92);
   }
   50% {
-    filter: saturate(1.08);
+    filter: saturate(1.12);
   }
   100% {
     filter: saturate(0.92);
-  }
-}
-
-@keyframes snowfall {
-  0% {
-    transform: translate3d(0, -15vh, 0);
-    opacity: 0; 
-  }
-  12% {
-    opacity: var(--alpha, 0.78);
-  }
-  50% {
-    transform: translate3d(var(--drift-mid, 0vw), calc(var(--travel-mid-y, 52) * 1vh), 0);
-    opacity: calc(var(--alpha, 0.78) * 0.92);
-  }
-  100% {
-    transform: translate3d(var(--drift-end, 0vw), calc(var(--travel-end-y, 115) * 1vh), 0);
-    opacity: 0;
   }
 }
 
@@ -161,10 +110,6 @@ body.reduced-motion .site-footer {
   opacity: 1;
 }
 
-body.reduced-motion .snowflake {
-  animation-duration: calc(var(--duration, 14s) * 1.35);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .status-dot,
   .track-progress,
@@ -174,9 +119,5 @@ body.reduced-motion .snowflake {
   .site-footer {
     animation: none;
     opacity: 1;
-  }
-
-  .snowflake {
-    animation-duration: calc(var(--duration, 14s) * 1.35);
   }
 }

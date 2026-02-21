@@ -1,14 +1,15 @@
 export const appState = {
   guestbookEntries: [],
-  userEffectSettings: { snow: true },
   guestbookMode: "local",
   supabaseClient: null,
   adminUser: null,
   guestbookBusy: false
 };
 
-export const snowState = {
+export const physicsState = {
+  runtime: null,
   isReady: false,
+  pointerBound: false,
   resizeBound: false,
-  flakeCount: 0
+  visibilityBound: false
 };
