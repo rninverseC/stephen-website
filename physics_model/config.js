@@ -3,7 +3,7 @@ export const PHYSICS_CONFIG = {
   pressureIterations: 24,
   timeScale: 0.58,
   velocityDissipation: 0.991,
-  dyeDissipation: 0.989,
+  dyeDissipation: 0.985,
   vorticity: 9,
   particleCount: 7600,
   particleSizePx: 1.6,

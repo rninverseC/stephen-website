@@ -88,7 +88,7 @@ export function createFluidSimulation({ gl, config = PHYSICS_CONFIG }) {
     gl,
     FULLSCREEN_VERTEX_SHADER,
     SPLAT_FRAGMENT_SHADER,
-    ["uTarget", "uPoint", "uValue", "uRadius", "uAspect"]
+    ["uTarget", "uPoint", "uValue", "uRadius", "uAspect", "uDirection", "uStretch"]
   );
   const curlProgram = createProgram(
     gl,
@@ -152,7 +152,7 @@ export function createFluidSimulation({ gl, config = PHYSICS_CONFIG }) {
     fullscreen.draw();
   }
 
-  function runSplat(doubleTarget, x, y, value, radius) {
+  function runSplat(doubleTarget, x, y, value, radius, directionX = 1, directionY = 0, stretch = 1) {
     draw(splatProgram, doubleTarget.write, simResolution, simResolution);
     bindTexture(gl, doubleTarget.read.texture, 0);
     setUniform1i(gl, splatProgram.uniforms.uTarget, 0);
@@ -160,6 +160,8 @@ export function createFluidSimulation({ gl, config = PHYSICS_CONFIG }) {
     setUniform3f(gl, splatProgram.uniforms.uValue, value[0], value[1], value[2]);
     setUniform1f(gl, splatProgram.uniforms.uRadius, radius);
     setUniform1f(gl, splatProgram.uniforms.uAspect, viewportAspect);
+    setUniform2f(gl, splatProgram.uniforms.uDirection, directionX, directionY);
+    setUniform1f(gl, splatProgram.uniforms.uStretch, stretch);
     fullscreen.draw();
     doubleTarget.swap();
   }
@@ -232,52 +234,83 @@ export function createFluidSimulation({ gl, config = PHYSICS_CONFIG }) {
       const safeSpeed = speed > 0.0001 ? speed : 1;
       const dirX = impulse.dx / safeSpeed;
       const dirY = -impulse.dy / safeSpeed;
-      const mainVelocityRadius = impulse.radius * 0.78;
-      const mainDyeRadius = impulse.radius * 1.42;
+      const normalX = -dirY;
+      const normalY = dirX;
+      const mainVelocityRadius = impulse.radius * 0.55;
+      const mainDyeRadius = impulse.radius * 0.62;
       const colorR = impulse.color[0];
       const colorG = impulse.color[1];
       const colorB = impulse.color[2];
-      const trailStep = 0.0028;
+      const segmentCount = speed > 0.28 ? 5 : 3;
+      const headHighlight = [0.11, 0.16, 0.22];
 
-      runSplat(
-        velocity,
-        impulse.x,
-        impulse.y,
-        [velocityX, velocityY, 0],
-        mainVelocityRadius
-      );
+      for (let i = 0; i < segmentCount; i += 1) {
+        const t = segmentCount <= 1 ? 0 : i / (segmentCount - 1);
+        const fade = Math.pow(1 - t, 1.45);
+        const backShift = t * (0.0062 + speed * 0.00018);
+        const centerX = Math.min(0.995, Math.max(0.005, impulse.x - dirX * backShift));
+        const centerY = Math.min(0.995, Math.max(0.005, impulse.y - dirY * backShift));
+        const lateral = (0.0011 + impulse.radius * 1.4) * (1 - t * 0.5);
+        const sideRadius = mainDyeRadius * (0.54 + (1 - t) * 0.2);
+        const lineStretch = 3.8 - t * 1.8;
+        const velocityScale = 0.34 * fade;
+        const dyeScale = 0.42 * fade;
+
+        runSplat(
+          velocity,
+          centerX,
+          centerY,
+          [velocityX * velocityScale, velocityY * velocityScale, 0],
+          mainVelocityRadius * (0.82 - t * 0.32),
+          dirX,
+          dirY,
+          lineStretch
+        );
+
+        runSplat(
+          dye,
+          centerX,
+          centerY,
+          [colorR * dyeScale, colorG * dyeScale, colorB * (dyeScale * 1.08)],
+          mainDyeRadius * (0.8 - t * 0.25),
+          dirX,
+          dirY,
+          lineStretch
+        );
+
+        runSplat(
+          dye,
+          Math.min(0.995, Math.max(0.005, centerX + normalX * lateral)),
+          Math.min(0.995, Math.max(0.005, centerY + normalY * lateral)),
+          [colorR * dyeScale * 0.56, colorG * dyeScale * 0.62, colorB * dyeScale * 0.74],
+          sideRadius,
+          dirX,
+          dirY,
+          2.4 - t * 0.8
+        );
+
+        runSplat(
+          dye,
+          Math.min(0.995, Math.max(0.005, centerX - normalX * lateral)),
+          Math.min(0.995, Math.max(0.005, centerY - normalY * lateral)),
+          [colorR * dyeScale * 0.56, colorG * dyeScale * 0.62, colorB * dyeScale * 0.74],
+          sideRadius,
+          dirX,
+          dirY,
+          2.4 - t * 0.8
+        );
+      }
 
       runSplat(
         dye,
-        impulse.x,
-        impulse.y,
-        [colorR, colorG, colorB],
-        mainDyeRadius
+        Math.min(0.995, Math.max(0.005, impulse.x + dirX * 0.0014)),
+        Math.min(0.995, Math.max(0.005, impulse.y + dirY * 0.0014)),
+        [headHighlight[0], headHighlight[1], headHighlight[2]],
+        mainDyeRadius * 0.54,
+        dirX,
+        dirY,
+        1.35
       );
-
-      if (speed > 0.28) {
-        for (let i = 1; i <= 3; i += 1) {
-          const falloff = i === 1 ? 0.5 : i === 2 ? 0.32 : 0.18;
-          const trailX = Math.min(0.995, Math.max(0.005, impulse.x - dirX * trailStep * i));
-          const trailY = Math.min(0.995, Math.max(0.005, impulse.y - dirY * trailStep * i));
-
-          runSplat(
-            velocity,
-            trailX,
-            trailY,
-            [velocityX * falloff * 0.34, velocityY * falloff * 0.34, 0],
-            mainVelocityRadius * (1 - i * 0.18)
-          );
-
-          runSplat(
-            dye,
-            trailX,
-            trailY,
-            [colorR * falloff, colorG * falloff, colorB * falloff],
-            mainDyeRadius * (1 - i * 0.2)
-          );
-        }
-      }
     }
   }
 

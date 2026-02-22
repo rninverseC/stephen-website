@@ -15,8 +15,8 @@ function mix(a, b, t) {
 }
 
 function createColor(intensity, tint) {
-  const cold = [0.29, 0.43, 0.63];
-  const hot = [0.62, 0.78, 0.95];
+  const cold = [0.09, 0.17, 0.29];
+  const hot = [0.27, 0.45, 0.71];
   return [
     mix(cold[0], hot[0], intensity) * tint,
     mix(cold[1], hot[1], intensity) * tint,
