@@ -15,6 +15,7 @@ import { dom } from "./dom.js";
 let nowPlayingPollTimer = null;
 let nowPlayingTickTimer = null;
 let nowPlayingRuntime = null;
+let albumPreviewRuntime = null;
 const MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
 const AGE_UPDATE_INTERVAL_MS = 250;
 const birthDateMs = Date.parse(BIRTH_DATE_ISO);
@@ -124,20 +125,129 @@ function buildAlbumFigure(entry, fallbackLabel) {
   image.src = src;
   image.loading = "lazy";
   image.decoding = "async";
-  image.alt = typeof entry === "object" && typeof entry?.alt === "string" && entry.alt.trim()
+  const resolvedAlt = typeof entry === "object" && typeof entry?.alt === "string" && entry.alt.trim()
     ? entry.alt.trim()
     : typeof entry === "object" && typeof entry?.caption === "string" && entry.caption.trim()
       ? entry.caption.trim()
       : fallbackLabel;
-  figure.appendChild(image);
+  image.alt = resolvedAlt;
 
-  if (typeof entry === "object" && typeof entry?.caption === "string" && entry.caption.trim()) {
+  const resolvedCaption = typeof entry === "object" && typeof entry?.caption === "string" && entry.caption.trim()
+    ? entry.caption.trim()
+    : "";
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "album-item-trigger";
+  trigger.setAttribute("aria-label", `Open preview: ${resolvedAlt}`);
+  trigger.addEventListener("click", () => {
+    openAlbumPreview(src, resolvedAlt, resolvedCaption);
+  });
+  trigger.appendChild(image);
+  figure.appendChild(trigger);
+
+  if (resolvedCaption) {
     const caption = document.createElement("figcaption");
-    caption.textContent = entry.caption.trim();
+    caption.textContent = resolvedCaption;
     figure.appendChild(caption);
   }
 
   return figure;
+}
+
+function closeAlbumPreview() {
+  if (!albumPreviewRuntime || albumPreviewRuntime.overlay.hidden) {
+    return;
+  }
+
+  albumPreviewRuntime.overlay.hidden = true;
+  document.body.classList.remove("has-album-preview");
+
+  if (albumPreviewRuntime.lastFocusedElement instanceof HTMLElement) {
+    albumPreviewRuntime.lastFocusedElement.focus();
+  }
+  albumPreviewRuntime.lastFocusedElement = null;
+}
+
+function ensureAlbumPreview() {
+  if (albumPreviewRuntime) {
+    return albumPreviewRuntime;
+  }
+
+  const overlay = document.createElement("div");
+  overlay.className = "album-preview";
+  overlay.hidden = true;
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", "Image preview");
+
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "album-preview-close";
+  closeButton.setAttribute("aria-label", "Close preview");
+  closeButton.textContent = "Close";
+
+  const figure = document.createElement("figure");
+  figure.className = "album-preview-figure";
+
+  const image = document.createElement("img");
+  image.className = "album-preview-image";
+  image.alt = "";
+
+  const caption = document.createElement("figcaption");
+  caption.className = "album-preview-caption";
+
+  figure.appendChild(image);
+  figure.appendChild(caption);
+
+  overlay.appendChild(closeButton);
+  overlay.appendChild(figure);
+  document.body.appendChild(overlay);
+
+  closeButton.addEventListener("click", closeAlbumPreview);
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeAlbumPreview();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !overlay.hidden) {
+      event.preventDefault();
+      closeAlbumPreview();
+    }
+  });
+
+  albumPreviewRuntime = {
+    overlay,
+    image,
+    caption,
+    closeButton,
+    lastFocusedElement: null
+  };
+
+  return albumPreviewRuntime;
+}
+
+function openAlbumPreview(src, altText, captionText) {
+  if (!src) {
+    return;
+  }
+
+  const preview = ensureAlbumPreview();
+  preview.lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+  preview.image.src = src;
+  preview.image.alt = altText || "Album photo";
+
+  const resolvedCaption = typeof captionText === "string" && captionText.trim()
+    ? captionText.trim()
+    : altText || "";
+  preview.caption.textContent = resolvedCaption;
+  preview.caption.hidden = !resolvedCaption;
+
+  preview.overlay.hidden = false;
+  document.body.classList.add("has-album-preview");
+  preview.closeButton.focus();
 }
 
 function normalizeAlbumSections() {

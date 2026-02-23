@@ -29,7 +29,25 @@ export const ALBUM_SECTIONS = [
     id: "life",
     title: "Life",
     images: [
-      // { file: "life-01.jpg", alt: "Random moment", caption: "Life lately" }
+      // Order: Ocean -> China -> Joshua Tree -> Palm Springs -> San Francisco -> Sunset -> Beach.
+      { file: "life/ocean-01.jpg", alt: "Ocean", caption: "Ocean 1" },
+      { file: "life/ocean-02.png", alt: "Ocean", caption: "Ocean 2" },
+      { file: "life/china-01.png", alt: "China", caption: "China 1" },
+      { file: "life/china-02.jpg", alt: "China", caption: "China 2" },
+      { file: "life/china-03.png", alt: "China", caption: "China 3" },
+      { file: "life/china-04.png", alt: "China", caption: "China 4" },
+      { file: "life/china-05.png", alt: "China", caption: "China 5" },
+      { file: "life/joshua-tree-01.jpg", alt: "Joshua Tree", caption: "Joshua Tree 1" },
+      { file: "life/joshua-tree-02.jpg", alt: "Joshua Tree", caption: "Joshua Tree 2" },
+      { file: "life/palm-springs-01.jpg", alt: "Palm Springs", caption: "Palm Springs 1" },
+      { file: "life/palm-springs-02.jpg", alt: "Palm Springs", caption: "Palm Springs 2" },
+      { file: "life/palm-springs-03.jpg", alt: "Palm Springs", caption: "Palm Springs 3" },
+      { file: "life/san-francisco-01.png", alt: "San Francisco", caption: "San Francisco 1" },
+      { file: "life/san-francisco-02.jpg", alt: "San Francisco", caption: "San Francisco 2" },
+      { file: "life/san-francisco-03.jpg", alt: "San Francisco", caption: "San Francisco 3" },
+      { file: "life/sunset-01.png", alt: "Sunset", caption: "Sunset 1" },
+      { file: "life/sunset-02.jpg", alt: "SpaceX", caption: "Spaceship" },
+      { file: "life/beach-01.png", alt: "Beach", caption: "Beach 1" }
     ]
   },
   {
@@ -40,17 +58,13 @@ export const ALBUM_SECTIONS = [
     ]
   },
   {
-    id: "china",
-    title: "China",
-    images: [
-      // { file: "china-01.jpg", alt: "Street in China", caption: "Trip memory" }
-    ]
-  },
-  {
     id: "food",
     title: "Food",
     images: [
-      // { file: "food-01.jpg", alt: "Favorite meal", caption: "Food memory" }
+      { file: "food/IMG_6915.png", alt: "Food photo 1", caption: "Food photo 1" },
+      { file: "food/IMG_9157.jpg", alt: "Food photo 2", caption: "Food photo 2" },
+      { file: "food/IMG_9158.jpg", alt: "Food photo 3", caption: "Food photo 3" },
+      { file: "food/IMG_9231.jpg", alt: "Food photo 4", caption: "Food photo 4" }
     ]
   }
 ];
