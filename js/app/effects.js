@@ -58,7 +58,11 @@ function bindPointerEvents() {
   }, { passive: true });
 
   window.addEventListener("pointermove", (event) => {
-    emitPointer(event.clientX, event.clientY, pointerDown || event.buttons > 0);
+    const isDown = pointerDown || event.buttons > 0;
+    if (!isDown) {
+      return;
+    }
+    emitPointer(event.clientX, event.clientY, true);
   }, { passive: true });
 
   window.addEventListener("pointerup", (event) => {

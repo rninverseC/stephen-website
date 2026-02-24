@@ -28,8 +28,6 @@ export function createPointerController(config) {
   const queue = [];
   let idleAccumulator = 0;
   let idleSeed = Math.random() * 1000;
-  let smoothDx = 0;
-  let smoothDy = 0;
 
   function enqueue(impulse) {
     queue.push(impulse);
@@ -41,25 +39,19 @@ export function createPointerController(config) {
   function push(x, y, dx, dy, isDown) {
     const safeX = clamp01(x);
     const safeY = clamp01(1 - y);
-    const speed = Math.hypot(dx, dy);
-
-    if (!isDown && speed < 1.2) {
+    if (!isDown) {
       return;
     }
 
-    const smoothFactor = isDown ? 0.24 : 0.16;
-    smoothDx = mix(smoothDx, dx, smoothFactor);
-    smoothDy = mix(smoothDy, dy, smoothFactor);
-
-    const smoothSpeed = Math.hypot(smoothDx, smoothDy);
-    const intensity = clamp01(smoothSpeed / 54);
-    const forceScale = isDown ? 1.2 : 0.7;
+    const speed = Math.hypot(dx, dy);
+    const intensity = clamp01(speed / 54);
+    const forceScale = 1.2;
 
     enqueue({
       x: safeX,
       y: safeY,
-      dx: smoothDx,
-      dy: smoothDy,
+      dx,
+      dy,
       force: config.pointerForce * forceScale * (0.35 + intensity),
       radius: config.pointerRadius * (0.82 + intensity * 0.86),
       color: createColor(intensity, 1.0)
