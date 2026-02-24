@@ -46,7 +46,7 @@ export const ALBUM_SECTIONS = [
       { file: "life/san-francisco-02.jpg", alt: "San Francisco", caption: "San Francisco 2" },
       { file: "life/san-francisco-03.jpg", alt: "San Francisco", caption: "San Francisco 3" },
       { file: "life/sunset-01.png", alt: "Sunset", caption: "Sunset 1" },
-      { file: "life/sunset-02.jpg", alt: "SpaceX", caption: "Spaceship" },
+      { file: "life/sunset-02.jpg", alt: "Sunset", caption: "Sunset 2" },
       { file: "life/beach-01.png", alt: "Beach", caption: "Beach 1" }
     ]
   },

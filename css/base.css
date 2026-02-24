@@ -429,6 +429,9 @@ body.subpage [data-widget="pages"] .link-list a {
   position: relative;
   z-index: 2;
   height: 100%;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.64rem;
   overflow: auto;
   padding-left: 1rem;
   padding-right: 0.28rem;
@@ -439,7 +442,7 @@ body.subpage [data-widget="pages"] .link-list a {
 }
 
 .album-chapter-title {
-  margin: 0 0 0.7rem;
+  margin: 0;
   padding-bottom: 0.4rem;
   border-bottom: 1px dashed rgba(121, 174, 222, 0.42);
   color: #c9ddf5;
@@ -448,10 +451,84 @@ body.subpage [data-widget="pages"] .link-list a {
   letter-spacing: 0.02em;
 }
 
+.album-chapter-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.56rem;
+}
+
+.album-chapter-count {
+  margin: 0;
+  color: #a5bdd8;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.album-pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.album-pager-btn,
+.album-pager-number {
+  border: 1px solid rgba(121, 174, 222, 0.32);
+  border-radius: 999px;
+  background: rgba(11, 22, 36, 0.76);
+  color: #bfd4ee;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.album-pager-btn {
+  padding: 0.34rem 0.68rem;
+}
+
+.album-pager-numbers {
+  display: inline-flex;
+  gap: 0.32rem;
+}
+
+.album-pager-number {
+  min-width: 1.82rem;
+  padding: 0.34rem 0.5rem;
+}
+
+.album-pager-btn:hover,
+.album-pager-btn:focus-visible,
+.album-pager-number:hover,
+.album-pager-number:focus-visible {
+  color: #eff6ff;
+  border-color: rgba(170, 201, 234, 0.62);
+  transform: translateY(-1px);
+}
+
+.album-pager-number.is-active,
+.album-pager-number:disabled {
+  color: #f2f7ff;
+  border-color: rgba(121, 174, 222, 0.74);
+  background: linear-gradient(90deg, rgba(121, 174, 222, 0.84), rgba(130, 176, 221, 0.84));
+}
+
+.album-pager-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .album-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
   gap: 0.74rem;
+  align-content: start;
 }
 
 .album-item {
@@ -1108,6 +1185,20 @@ body.reduced-motion .album-book-page.is-leaving {
 
   .guestbook-admin-row {
     grid-template-columns: 1fr;
+  }
+
+  .album-pager {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .album-pager-btn {
+    padding: 0.34rem 0.58rem;
+  }
+
+  .album-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
   }
 }
 

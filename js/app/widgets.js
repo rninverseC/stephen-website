@@ -19,6 +19,10 @@ let albumPreviewRuntime = null;
 const MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
 const AGE_UPDATE_INTERVAL_MS = 250;
 const birthDateMs = Date.parse(BIRTH_DATE_ISO);
+const ALBUM_PAGE_SIZE_DESKTOP = 8;
+const ALBUM_PAGE_SIZE_TABLET = 6;
+const ALBUM_PAGE_SIZE_MOBILE = 4;
+const ALBUM_MAX_PAGE_BUTTONS = 5;
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -266,7 +270,19 @@ function normalizeAlbumSections() {
   }));
 }
 
-function buildAlbumBookPage(section) {
+function getAlbumPageSize() {
+  if (window.matchMedia("(max-width: 620px)").matches) {
+    return ALBUM_PAGE_SIZE_MOBILE;
+  }
+
+  if (window.matchMedia("(max-width: 960px)").matches) {
+    return ALBUM_PAGE_SIZE_TABLET;
+  }
+
+  return ALBUM_PAGE_SIZE_DESKTOP;
+}
+
+function buildAlbumBookPage(section, chapterPageById) {
   const page = document.createElement("article");
   page.className = "album-book-page";
   page.id = `album-book-page-${section.id}`;
@@ -282,26 +298,121 @@ function buildAlbumBookPage(section) {
   title.textContent = section.title;
   inner.appendChild(title);
 
+  const chapterMeta = document.createElement("div");
+  chapterMeta.className = "album-chapter-meta";
+
+  const chapterCount = document.createElement("p");
+  chapterCount.className = "album-chapter-count";
+
+  const pager = document.createElement("nav");
+  pager.className = "album-pager";
+  pager.setAttribute("aria-label", `${section.title} pages`);
+
+  const previousButton = document.createElement("button");
+  previousButton.type = "button";
+  previousButton.className = "album-pager-btn";
+  previousButton.textContent = "Prev";
+
+  const pageNumbers = document.createElement("div");
+  pageNumbers.className = "album-pager-numbers";
+
+  const nextButton = document.createElement("button");
+  nextButton.type = "button";
+  nextButton.className = "album-pager-btn";
+  nextButton.textContent = "Next";
+
+  pager.appendChild(previousButton);
+  pager.appendChild(pageNumbers);
+  pager.appendChild(nextButton);
+
+  chapterMeta.appendChild(chapterCount);
+  chapterMeta.appendChild(pager);
+  inner.appendChild(chapterMeta);
+
   const grid = document.createElement("div");
   grid.className = "album-grid";
+  inner.appendChild(grid);
 
-  let addedCount = 0;
-  section.images.forEach((entry, imageIndex) => {
-    const figure = buildAlbumFigure(entry, `${section.title} photo ${imageIndex + 1}`);
-    if (!figure) {
+  const totalImages = section.images.length;
+  let activePageIndex = Number.isFinite(chapterPageById.get(section.id))
+    ? Number(chapterPageById.get(section.id))
+    : 0;
+
+  function renderPage(pageIndex = activePageIndex) {
+    const pageSize = getAlbumPageSize();
+    const totalPages = Math.max(1, Math.ceil(totalImages / pageSize));
+    activePageIndex = clamp(pageIndex, 0, totalPages - 1);
+    chapterPageById.set(section.id, activePageIndex);
+
+    previousButton.disabled = activePageIndex <= 0 || totalImages === 0;
+    nextButton.disabled = activePageIndex >= totalPages - 1 || totalImages === 0;
+    chapterCount.textContent = totalImages === 0
+      ? "No photos yet"
+      : `${totalImages} photos • page ${activePageIndex + 1} of ${totalPages}`;
+
+    pageNumbers.textContent = "";
+    pageNumbers.hidden = totalImages === 0 || totalPages <= 1;
+
+    if (!pageNumbers.hidden) {
+      const halfSpan = Math.floor(ALBUM_MAX_PAGE_BUTTONS / 2);
+      let start = Math.max(0, activePageIndex - halfSpan);
+      let end = Math.min(totalPages, start + ALBUM_MAX_PAGE_BUTTONS);
+      start = Math.max(0, end - ALBUM_MAX_PAGE_BUTTONS);
+
+      for (let numberIndex = start; numberIndex < end; numberIndex += 1) {
+        const numberButton = document.createElement("button");
+        numberButton.type = "button";
+        numberButton.className = "album-pager-number";
+        numberButton.textContent = `${numberIndex + 1}`;
+        numberButton.setAttribute("aria-label", `Page ${numberIndex + 1}`);
+        numberButton.classList.toggle("is-active", numberIndex === activePageIndex);
+        numberButton.disabled = numberIndex === activePageIndex;
+        numberButton.addEventListener("click", () => {
+          renderPage(numberIndex);
+        });
+        pageNumbers.appendChild(numberButton);
+      }
+    }
+
+    grid.textContent = "";
+
+    if (totalImages === 0) {
+      const empty = document.createElement("p");
+      empty.className = "empty-note";
+      empty.textContent = "No photos in this section yet.";
+      grid.appendChild(empty);
       return;
     }
-    grid.appendChild(figure);
-    addedCount += 1;
-  });
 
-  if (addedCount === 0) {
-    const empty = document.createElement("p");
-    empty.className = "empty-note";
-    grid.appendChild(empty);
+    const startIndex = activePageIndex * pageSize;
+    const endIndex = Math.min(totalImages, startIndex + pageSize);
+
+    for (let imageIndex = startIndex; imageIndex < endIndex; imageIndex += 1) {
+      const entry = section.images[imageIndex];
+      const figure = buildAlbumFigure(entry, `${section.title} photo ${imageIndex + 1}`);
+      if (figure) {
+        grid.appendChild(figure);
+      }
+    }
+
+    if (!grid.childElementCount) {
+      const empty = document.createElement("p");
+      empty.className = "empty-note";
+      empty.textContent = "No photos in this section yet.";
+      grid.appendChild(empty);
+    }
   }
 
-  inner.appendChild(grid);
+  previousButton.addEventListener("click", () => {
+    renderPage(activePageIndex - 1);
+  });
+
+  nextButton.addEventListener("click", () => {
+    renderPage(activePageIndex + 1);
+  });
+
+  renderPage();
+
   page.appendChild(inner);
   return page;
 }
@@ -333,8 +444,9 @@ function renderAlbum() {
   const frame = document.createElement("div");
   frame.className = "album-book-frame";
 
+  const chapterPageById = new Map();
   let activeIndex = 0;
-  let activePage = buildAlbumBookPage(sections[activeIndex]);
+  let activePage = buildAlbumBookPage(sections[activeIndex], chapterPageById);
   activePage.classList.add("is-active");
   frame.appendChild(activePage);
 
@@ -361,7 +473,7 @@ function renderAlbum() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
       || document.body.classList.contains("reduced-motion");
     const directionClass = nextIndex > activeIndex ? "flip-forward" : "flip-backward";
-    const nextPage = buildAlbumBookPage(sections[nextIndex]);
+    const nextPage = buildAlbumBookPage(sections[nextIndex], chapterPageById);
 
     if (reduceMotion) {
       activePage.remove();
